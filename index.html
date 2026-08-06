@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创作计划清单 — Minimal Editorial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Newsreader', 'Noto Serif SC', serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* 极简无填充自定义勾选框：打勾时不填充任何背景色，仅保留描边 */
+        .minimal-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--border-color);
+            background-color: transparent !important;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.15s ease;
+            outline: none;
+        }
+        .minimal-checkbox:checked {
+            background-color: transparent !important;
+            border-color: var(--border-color);
+        }
+        .minimal-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 4px;
+            height: 8px;
+            border: solid var(--check-color);
+            border-width: 0 1.5px 1.5px 0;
+            transform: rotate(45deg);
+        }
+
+        /* 已完成时方框与文字均变灰色并带划线 */
+        .completed-row {
+            opacity: 0.4;
+            text-decoration: line-through;
+            color: var(--completed-color) !important;
+        }
+        .completed-row .minimal-checkbox {
+            border-color: var(--completed-color) !important;
+        }
+        .completed-row .minimal-checkbox:checked::after {
+            border-color: var(--completed-color) !important;
+        }
+
+        /* 可点击行的悬停反馈 */
+        .editable-row {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .editable-row:hover {
+            background-color: var(--row-hover-color);
+        }
+
+        /* 渐入动效 */
+        .fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 隐藏滚动条但保留功能 */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
+
+    <header class="w-full max-w-6xl mx-auto px-8 pt-16 pb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-[var(--divider-color)] gap-6">
+        <div>
+            <p class="text-[11px] tracking-[0.25em] uppercase text-[#d4b886] font-mono mb-3" style="font-family: 'Times New Roman', Times, serif;">CREATION PLAN CHECKLIST</p>
+            <h1 class="text-3xl md:text-4xl font-semibold tracking-tight text-[#d4b886] font-serif font-bold">创作计划清单</h1>
+        </div>
+        <div class="flex items-center space-x-8">
+            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider hidden sm:inline-block"></span>
+            <button onclick="openModal()" class="px-5 py-2.5 bg-[#d4b886] text-[#0b0b0b] text-xs tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-medium">
+                新增计划
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-8 py-12">
+        
+        <!-- Table Container -->
+        <div class="w-full overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono">
+                        <th class="py-3 px-4 font-normal w-24">状态</th>
+                        <th class="py-3 px-6 font-normal w-32">日期</th>
+                        <th class="py-3 px-6 font-normal w-56">主题</th>
+                        <th class="py-3 px-6 font-normal w-56">配乐</th>
+                        <th class="py-3 px-6 font-normal">文案</th>
+                    </tr>
+                </thead>
+                <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden py-32 text-center">
+            <p class="text-sm text-[#d4b886] font-serif tracking-wide mb-1">暂无相关条目</p>
+            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右上角新增计划开始记录</p>
+        </div>
+
+    </main>
+
+    <footer class="py-12 border-t border-[var(--divider-color)] text-center text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+        <p>©️ 2026 Z_Z</p>
+    </footer>
+
+    <!-- Theme Toggle Icon (Bottom Left, Borderless) -->
+    <div class="fixed bottom-8 left-8 z-40">
+        <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
+            <svg id="theme-icon" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
+        </button>
+    </div>
+
+    <!-- Modal Form -->
+    <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
+        <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-8 border border-[#2a2a2a] shadow-2xl fade-in">
+            <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
+                <h3 id="modal-title" class="text-sm tracking-widest uppercase font-mono text-[#d4b886]">新增创作计划</h3>
+                <button onclick="closeModal()" class="text-[#d4b886] hover:opacity-100 opacity-70 transition-opacity">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form id="task-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="task-id">
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">日期</label>
+                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">主题</label>
+                    <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">配乐</label>
+                    <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
+                    <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">确认保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
+        <div id="confirm-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
+            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
+            <p class="text-xs text-[#d4b886] mb-6 font-serif opacity-85">确定要移除这条创作计划吗？</p>
+            <div class="flex justify-center space-x-3">
+                <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
+                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 left-8 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium"></div>
+
+    <script>
+        const defaultTasks = [
+            {
+                id: '1',
+                date: '2026-06-07',
+                theme: '光影与几何结构',
+                bgm: 'Max Richter - On the Nature of Daylight',
+                copywriting: '将焦点对准建筑外立面的阴影，捕捉午后三点钟干净的直线。',
+                completed: true
+            },
+            {
+                id: '2',
+                date: '2026-06-09',
+                theme: '静物与黑白银盐',
+                bgm: 'Ryuichi Sakamoto - Aqua',
+                copywriting: '在低饱和度的环境中，让纸张的纹理自然呼吸。',
+                completed: false
+            },
+            {
+                id: '3',
+                date: '2026-06-14',
+                theme: '独立出版物的排版实验',
+                bgm: 'Nils Frahm - Says',
+                copywriting: '留白不仅是空间，也是一种克制的情绪表达。',
+                completed: false
+            }
+        ];
+
+        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v8')) || defaultTasks;
+        let deleteTargetId = null;
+        let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentTheme);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' };
+            document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
+            document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
+            renderTasks();
+        });
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('minimal_editorial_theme', theme);
+            const body = document.getElementById('app-body');
+            const themeIcon = document.getElementById('theme-icon');
+            const modalContent = document.getElementById('modal-content');
+            const confirmContent = document.getElementById('confirm-content');
+            
+            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea');
+
+            if (theme === 'light') {
+                body.style.setProperty('--bg-color', '#fbfbf9');
+                body.style.setProperty('--text-color', '#2c2825');
+                body.style.setProperty('--border-color', '#2c2825');
+                body.style.setProperty('--check-color', '#2c2825');
+                body.style.setProperty('--completed-color', '#948c85');
+                body.style.setProperty('--divider-color', '#e5e2db');
+                body.style.setProperty('--sub-divider-color', '#f0ede6');
+                body.style.setProperty('--scrollbar-color', '#d5d0c7');
+                body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
+
+                body.style.backgroundColor = '#fbfbf9';
+                body.style.color = '#2c2825';
+                
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>';
+
+                if (modalContent) {
+                    modalContent.style.backgroundColor = '#f4f2ec';
+                    modalContent.style.color = '#2c2825';
+                    modalContent.style.borderColor = '#d5d0c7';
+                }
+                if (confirmContent) {
+                    confirmContent.style.backgroundColor = '#f4f2ec';
+                    confirmContent.style.color = '#2c2825';
+                    confirmContent.style.borderColor = '#d5d0c7';
+                }
+
+                formInputs.forEach(input => {
+                    input.style.backgroundColor = '#eae7df';
+                    input.style.borderColor = '#d0cbc0';
+                    input.style.color = '#2c2825';
+                });
+            } else {
+                body.style.setProperty('--bg-color', '#0b0b0b');
+                body.style.setProperty('--text-color', '#d4b886');
+                body.style.setProperty('--border-color', '#d4b886');
+                body.style.setProperty('--check-color', '#d4b886');
+                body.style.setProperty('--completed-color', '#8c7d62');
+                body.style.setProperty('--divider-color', '#222222');
+                body.style.setProperty('--sub-divider-color', '#181818');
+                body.style.setProperty('--scrollbar-color', '#262626');
+                body.style.setProperty('--row-hover-color', 'rgba(255,255,255,0.025)');
+
+                body.style.backgroundColor = '#0b0b0b';
+                body.style.color = '#d4b886';
+
+                themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"></path>';
+
+                if (modalContent) {
+                    modalContent.style.backgroundColor = '#141414';
+                    modalContent.style.color = '#d4b886';
+                    modalContent.style.borderColor = '#2a2a2a';
+                }
+                if (confirmContent) {
+                    confirmContent.style.backgroundColor = '#141414';
+                    confirmContent.style.color = '#d4b886';
+                    confirmContent.style.borderColor = '#2a2a2a';
+                }
+
+                formInputs.forEach(input => {
+                    input.style.backgroundColor = '#1b1b1b';
+                    input.style.borderColor = '#2f2f2f';
+                    input.style.color = '#d4b886';
+                });
+            }
+        }
+
+        function toggleTheme() {
+            if (currentTheme === 'dark') {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('minimal_editorial_tasks_v8', JSON.stringify(tasks));
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
+
+        function renderTasks() {
+            const tbody = document.getElementById('task-table-body');
+            const emptyState = document.getElementById('empty-state');
+
+            let filtered = tasks;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            tbody.innerHTML = filtered.map(task => `
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="handleRowClick(event, '${task.id}')" title="点击空白处或双击可编辑该条目">
+                    <td class="py-4 px-4 whitespace-nowrap">
+                        <div class="inline-flex items-center space-x-2">
+                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
+                                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
+                            </label>
+                            <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="opacity-0 group-hover:opacity-60 hover:opacity-100 transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 text-[11px] font-mono whitespace-nowrap">
+                        ${task.date}
+                    </td>
+                    <td class="py-4 px-6 text-xs font-medium">
+                        ${escapeHTML(task.theme)}
+                    </td>
+                    <td class="py-4 px-6 text-xs">
+                        ${escapeHTML(task.bgm)}
+                    </td>
+                    <td class="py-4 px-6 text-xs leading-relaxed max-w-sm">
+                        ${escapeHTML(task.copywriting)}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function handleRowClick(event, id) {
+            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
+                return;
+            }
+            openModal(id);
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveToStorage();
+                renderTasks();
+            }
+        }
+
+        function openModal(editId = null) {
+            const modal = document.getElementById('task-modal');
+            const form = document.getElementById('task-form');
+            form.reset();
+            
+            if (editId) {
+                document.getElementById('modal-title').innerText = '编辑创作计划';
+                const task = tasks.find(t => t.id === editId);
+                if (task) {
+                    document.getElementById('task-id').value = task.id;
+                    document.getElementById('task-date').value = task.date;
+                    document.getElementById('task-theme').value = task.theme;
+                    document.getElementById('task-bgm').value = task.bgm;
+                    document.getElementById('task-copywriting').value = task.copywriting;
+                }
+            } else {
+                document.getElementById('modal-title').innerText = '新增创作计划';
+                document.getElementById('task-id').value = '';
+                document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('task-modal').classList.add('hidden');
+        }
+
+        function promptDelete(id) {
+            deleteTargetId = id;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            deleteTargetId = null;
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+            if (deleteTargetId) {
+                tasks = tasks.filter(t => t.id !== deleteTargetId);
+                saveToStorage();
+                renderTasks();
+                showToast('已成功删除条目');
+                closeConfirmModal();
+            }
+        });
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('task-id').value;
+            const date = document.getElementById('task-date').value;
+            const theme = document.getElementById('task-theme').value.trim();
+            const bgm = document.getElementById('task-bgm').value.trim();
+            const copywriting = document.getElementById('task-copywriting').value.trim();
+
+            if (id) {
+                const task = tasks.find(t => t.id === id);
+                if (task) {
+                    task.date = date;
+                    task.theme = theme;
+                    task.bgm = bgm;
+                    task.copywriting = copywriting;
+                    showToast('已更新创作计划');
+                }
+            } else {
+                const newTask = {
+                    id: Date.now().toString(),
+                    date,
+                    theme,
+                    bgm,
+                    copywriting,
+                    completed: false
+                };
+                tasks.push(newTask);
+                showToast('已添加新创作计划');
+            }
+
+            saveToStorage();
+            renderTasks();
+            closeModal();
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
