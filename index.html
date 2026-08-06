@@ -10,15 +10,14 @@
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
             transition: background-color 0.3s ease, color 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
         }
 
         /* 极简无填充自定义勾选框：打勾时不填充任何背景色，仅保留描边 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border: 1px solid var(--border-color);
             background-color: transparent !important;
             border-radius: 2px;
@@ -26,7 +25,6 @@
             position: relative;
             transition: all 0.15s ease;
             outline: none;
-            flex-shrink: 0;
         }
         .minimal-checkbox:checked {
             background-color: transparent !important;
@@ -38,7 +36,7 @@
             top: 2px;
             left: 5px;
             width: 4px;
-            height: 9px;
+            height: 8px;
             border: solid var(--check-color);
             border-width: 0 1.5px 1.5px 0;
             transform: rotate(45deg);
@@ -46,7 +44,7 @@
 
         /* 已完成时方框与文字均变灰色并带划线 */
         .completed-row {
-            opacity: 0.45;
+            opacity: 0.4;
             text-decoration: line-through;
             color: var(--completed-color) !important;
         }
@@ -87,18 +85,64 @@
             background: var(--scrollbar-color);
             border-radius: 2px;
         }
+
+        /* ===== 移动端适配：表格转卡片布局 ===== */
+        @media (max-width: 640px) {
+            #task-table-body,
+            #task-table-body tr,
+            #task-table-body td {
+                display: block;
+                width: 100%;
+            }
+            table, tbody { width: 100%; }
+            thead { display: none; }
+            #task-table-body tr {
+                border: 1px solid var(--sub-divider-color, #181818);
+                margin-bottom: 14px;
+                padding: 14px 4px;
+                border-radius: 2px;
+            }
+            #task-table-body td {
+                padding: 6px 8px !important;
+                white-space: normal !important;
+            }
+            /* 状态行（勾选框+删除按钮）单独一行横排 */
+            #task-table-body td:first-child {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px dashed var(--sub-divider-color, #181818);
+                padding-bottom: 10px !important;
+                margin-bottom: 6px;
+            }
+            /* 其余字段前显示标签，方便识别 */
+            #task-table-body td[data-label]:not(:first-child)::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 9px;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                opacity: 0.55;
+                margin-bottom: 3px;
+                font-family: monospace;
+            }
+            /* 删除按钮在移动端始终可见（无 hover 概念） */
+            #task-table-body .group button {
+                opacity: 0.6 !important;
+            }
+        }
     </style>
 </head>
 <body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
 
-    <header class="w-full max-w-6xl mx-auto px-6 sm:px-8 pt-10 sm:pt-16 pb-8 sm:pb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-[var(--divider-color)] gap-6">
+    <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-[var(--divider-color)] gap-4 sm:gap-6">
         <div>
-            <p class="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase text-[#d4b886] font-mono mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif;">CREATION PLAN CHECKLIST</p>
+            <p class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] font-mono mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif;">CREATION PLAN CHECKLIST</p>
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#d4b886] font-serif font-bold">创作计划清单</h1>
         </div>
-        <div class="flex items-center justify-between w-full sm:w-auto space-x-6">
-            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider hidden sm:inline-block"></span>
-            <button onclick="openModal()" class="w-full sm:w-auto px-5 py-2.5 bg-[#d4b886] text-[#0b0b0b] text-xs tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-medium text-center">
+        <div class="flex items-center justify-between w-full sm:w-auto space-x-4 sm:space-x-8">
+            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider inline-block"></span>
+            <button onclick="openModal()" class="px-4 sm:px-5 py-2 sm:py-2.5 bg-[#d4b886] text-[#0b0b0b] text-[11px] sm:text-xs tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-medium whitespace-nowrap">
                 新增计划
             </button>
         </div>
@@ -106,16 +150,16 @@
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
         
-        <!-- Desktop Table View (Hidden on Mobile) -->
-        <div class="hidden md:block w-full overflow-x-auto">
+        <!-- Table Container -->
+        <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono">
-                        <th class="py-3 px-4 font-normal w-24">状态</th>
-                        <th class="py-3 px-6 font-normal w-32">日期</th>
-                        <th class="py-3 px-6 font-normal w-56">主题</th>
-                        <th class="py-3 px-6 font-normal w-56">配乐</th>
-                        <th class="py-3 px-6 font-normal">文案</th>
+                        <th class="py-3 px-2 sm:px-4 font-normal w-20 sm:w-24">状态</th>
+                        <th class="py-3 px-3 sm:px-6 font-normal w-24 sm:w-32">日期</th>
+                        <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">主题</th>
+                        <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">配乐</th>
+                        <th class="py-3 px-3 sm:px-6 font-normal">文案</th>
                     </tr>
                 </thead>
                 <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
@@ -124,36 +168,31 @@
             </table>
         </div>
 
-        <!-- Mobile Card View (Shown on Mobile, Hidden on Desktop) -->
-        <div id="task-card-container" class="md:hidden space-y-4">
-            <!-- Dynamic Cards -->
-        </div>
-
         <!-- Empty State -->
-        <div id="empty-state" class="hidden py-24 sm:py-32 text-center">
+        <div id="empty-state" class="hidden py-32 text-center">
             <p class="text-sm text-[#d4b886] font-serif tracking-wide mb-1">暂无相关条目</p>
-            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击上方或右下角新增计划开始记录</p>
+            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右上角新增计划开始记录</p>
         </div>
 
     </main>
 
-    <footer class="py-10 sm:py-12 border-t border-[var(--divider-color)] text-center text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+    <footer class="py-8 sm:py-12 px-4 border-t border-[var(--divider-color)] text-center text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
     <!-- Theme Toggle Icon (Bottom Left, Borderless) -->
-    <div class="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-40">
-        <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center shadow-lg sm:shadow-none rounded-full sm:rounded-none bg-[var(--bg-color)]/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none" aria-label="切换模式">
+    <div class="fixed bottom-4 left-4 sm:bottom-8 sm:left-8 z-40">
+        <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
             <svg id="theme-icon" class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
         </button>
     </div>
 
     <!-- Modal Form -->
     <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
-        <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-6 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
+        <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-5 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
-                <h3 id="modal-title" class="text-xs sm:text-sm tracking-widest uppercase font-mono text-[#d4b886]">新增创作计划</h3>
-                <button onclick="closeModal()" class="text-[#d4b886] hover:opacity-100 opacity-70 transition-opacity p-1">
+                <h3 id="modal-title" class="text-sm tracking-widest uppercase font-mono text-[#d4b886]">新增创作计划</h3>
+                <button onclick="closeModal()" class="text-[#d4b886] hover:opacity-100 opacity-70 transition-opacity">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -161,19 +200,19 @@
                 <input type="hidden" id="task-id">
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">日期</label>
-                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2.5 sm:py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
+                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">主题</label>
-                    <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2.5 sm:py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                    <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">配乐</label>
-                    <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2.5 sm:py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                    <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
-                    <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2.5 sm:py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
+                    <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
@@ -196,7 +235,7 @@
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium shadow-lg"></div>
+    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
     <script>
         const defaultTasks = [
@@ -226,7 +265,7 @@
             }
         ];
 
-        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v9')) || defaultTasks;
+        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v8')) || defaultTasks;
         let deleteTargetId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
 
@@ -324,7 +363,7 @@
         }
 
         function saveToStorage() {
-            localStorage.setItem('minimal_editorial_tasks_v9', JSON.stringify(tasks));
+            localStorage.setItem('minimal_editorial_tasks_v8', JSON.stringify(tasks));
         }
 
         function showToast(message) {
@@ -336,14 +375,12 @@
 
         function renderTasks() {
             const tbody = document.getElementById('task-table-body');
-            const cardContainer = document.getElementById('task-card-container');
             const emptyState = document.getElementById('empty-state');
 
             let filtered = tasks;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
-                cardContainer.innerHTML = '';
                 emptyState.classList.remove('hidden');
                 return;
             }
@@ -351,10 +388,9 @@
             emptyState.classList.add('hidden');
             filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // Render Desktop Table Rows
             tbody.innerHTML = filtered.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="handleRowClick(event, '${task.id}')" title="点击空白处可编辑该条目">
-                    <td class="py-4 px-4 whitespace-nowrap">
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="handleRowClick(event, '${task.id}')" title="点击空白处或双击可编辑该条目">
+                    <td class="py-4 px-2 sm:px-4 whitespace-nowrap">
                         <div class="inline-flex items-center space-x-2">
                             <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
                                 <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
@@ -364,50 +400,19 @@
                             </button>
                         </div>
                     </td>
-                    <td class="py-4 px-6 text-[11px] font-mono whitespace-nowrap">
+                    <td class="py-4 px-3 sm:px-6 text-[11px] font-mono whitespace-nowrap" data-label="日期">
                         ${task.date}
                     </td>
-                    <td class="py-4 px-6 text-xs font-medium">
+                    <td class="py-4 px-3 sm:px-6 text-xs font-medium" data-label="主题">
                         ${escapeHTML(task.theme)}
                     </td>
-                    <td class="py-4 px-6 text-xs">
+                    <td class="py-4 px-3 sm:px-6 text-xs" data-label="配乐">
                         ${escapeHTML(task.bgm)}
                     </td>
-                    <td class="py-4 px-6 text-xs leading-relaxed max-w-sm">
+                    <td class="py-4 px-3 sm:px-6 text-xs leading-relaxed max-w-sm" data-label="文案">
                         ${escapeHTML(task.copywriting)}
                     </td>
                 </tr>
-            `).join('');
-
-            // Render Mobile Cards
-            cardContainer.innerHTML = filtered.map(task => `
-                <div class="p-5 border border-[var(--divider-color)] bg-[var(--bg-color)] transition-colors ${task.completed ? 'completed-row' : ''}" onclick="handleRowClick(event, '${task.id}')">
-                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-[var(--sub-divider-color)]">
-                        <div class="flex items-center space-x-3">
-                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()">
-                                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
-                            </label>
-                            <span class="text-[11px] font-mono opacity-80">${task.date}</span>
-                        </div>
-                        <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="p-1 opacity-70 hover:opacity-100 text-[#d4b886]" title="删除">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                    </div>
-                    <div class="space-y-2 text-xs">
-                        <div>
-                            <span class="text-[10px] font-mono uppercase tracking-wider opacity-60 block mb-0.5">主题</span>
-                            <span class="font-medium text-sm">${escapeHTML(task.theme)}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono uppercase tracking-wider opacity-60 block mb-0.5">配乐</span>
-                            <span>${escapeHTML(task.bgm)}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono uppercase tracking-wider opacity-60 block mb-0.5">文案</span>
-                            <p class="leading-relaxed opacity-90">${escapeHTML(task.copywriting)}</p>
-                        </div>
-                    </div>
-                </div>
             `).join('');
         }
 
