@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>创作计划清单 — Minimal Editorial</title>
 
-    <!-- ========================================================================= -->
-    <!-- 浏览器标签页 Logo (Favicon) 配置区域 -->
-    <!-- 说明：将下面的 href 地址替换为你上传到 GitHub 的文件路径/链接即可 -->
-    <!-- ========================================================================= -->
+    <!-- PWA Theme Color -->
+    <meta name="theme-color" content="#0b0b0b">
 
-    <!-- 1. 默认矢量 Favicon（内置极简暗金“创”字 SVG，无需外部链接即可直接在浏览器标签页预览） -->
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="创作清单">
+    <link rel="apple-touch-icon" href="./logo.png">
+
+    <!-- Web App Manifest (Data URI 内嵌模式，单文件即开即用) -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"创作计划清单","short_name":"创作清单","description":"Minimal Editorial 风格创作计划清单","start_url":"./","display":"standalone","background_color":"#0b0b0b","theme_color":"#0b0b0b","icons":[{"src":"./logo.png","sizes":"192x192 512x512","type":"image/png"}]}'>
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="./logo.png">
-
-    <!-- 2. GitHub 替换示例：如果图片放在 GitHub 仓库根目录（相对路径） -->
-    <!-- <link rel="icon" type="image/svg+xml" href="./favicon.svg"> -->
-    <!-- <link rel="icon" type="image/x-icon" href="./favicon.ico"> -->
-
-    <!-- 3. GitHub Pages 绝对路径或 Raw 链接示例 -->
-    <!-- <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png"> -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png"> -->
-    <!-- ========================================================================= -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -303,6 +301,7 @@
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             renderTasks();
             alignTitleWidth();
+            initServiceWorker();
         });
 
         function alignTitleWidth() {
@@ -577,6 +576,35 @@
             return str.replace(/[&<>'"]/g, 
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
+        }
+
+        // PWA Service Worker 注册逻辑 (优先调用 sw.js，同时支持 Blob 动态备用)
+        function initServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                const swContent = `
+                    const CACHE_NAME = 'minimal-editorial-v1';
+                    self.addEventListener('install', (e) => self.skipWaiting());
+                    self.addEventListener('activate', (e) => self.clients.claim());
+                    self.addEventListener('fetch', (e) => {
+                        if (e.request.method !== 'GET') return;
+                        e.respondWith(
+                            fetch(e.request).then(response => {
+                                const clone = response.clone();
+                                caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+                                return response;
+                            }).catch(() => caches.match(e.request))
+                        );
+                    });
+                `;
+
+                navigator.serviceWorker.register('./sw.js')
+                    .catch(() => {
+                        const blob = new Blob([swContent], { type: 'application/javascript' });
+                        return navigator.serviceWorker.register(URL.createObjectURL(blob));
+                    })
+                    .then(reg => console.log('ServiceWorker Ready'))
+                    .catch(err => console.log('ServiceWorker Info:', err));
+            }
         }
     </script>
 </body>
