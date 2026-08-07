@@ -108,6 +108,11 @@
             border-radius: 2px;
         }
 
+        /* 字段标签（真实 DOM span，而非 CSS content 生成，避免 Safari 下移动端标签回退成系统字体导致字体不统一 */
+        .field-label {
+            display: none;
+        }
+
         /* 移动端二维卡片网格样式重构（完全匹配截图字体与风格） */
         @media (max-width: 1023px) {
             table, thead, tbody, tr, td {
@@ -153,15 +158,16 @@
                 padding-bottom: 8px !important;
                 margin-bottom: 8px;
             }
-            /* 严格让日期、主题、配乐、文案等字段名标签也使用衬线体，彻底与图一致 */
-            #task-table-body td[data-label]:not(:first-child)::before {
-                content: attr(data-label);
+            /* 字段名标签：使用真实 DOM span，统一衬线体，避免生成内容字体不统一 */
+            .field-label {
                 display: inline-block;
                 font-size: 11px;
                 letter-spacing: 0.1em;
                 opacity: 0.6;
                 margin-right: 6px;
                 font-family: 'Newsreader', 'Noto Serif SC', serif !important;
+                font-weight: 400 !important;
+                font-style: normal !important;
             }
             #task-table-body td[data-label="主题"] {
                 font-size: 13px;
@@ -464,16 +470,16 @@
                         </div>
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-[11px] font-mono-custom whitespace-nowrap" data-label="日期">
-                        ${task.date}
+                        <span class="field-label">日期</span>${task.date}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs font-medium" data-label="主题">
-                        ${escapeHTML(task.theme || '')}
+                        <span class="field-label">主题</span>${escapeHTML(task.theme || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs" data-label="配乐">
-                        ${escapeHTML(task.bgm || '')}
+                        <span class="field-label">配乐</span>${escapeHTML(task.bgm || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs leading-relaxed max-w-sm" data-label="文案">
-                        ${escapeHTML(task.copywriting || '')}
+                        <span class="field-label">文案</span>${escapeHTML(task.copywriting || '')}
                     </td>
                 </tr>
             `).join('');
