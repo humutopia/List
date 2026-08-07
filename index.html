@@ -66,6 +66,20 @@
             background-color: var(--row-hover-color);
         }
 
+        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示，全设备统一行为 */
+        .row-delete-btn {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+        .row-revealed .row-delete-btn {
+            opacity: 0.7;
+            pointer-events: auto;
+        }
+        .row-revealed .row-delete-btn:hover {
+            opacity: 1;
+        }
+
         /* 渐入动效 */
         .fade-in {
             animation: fadeIn 0.25s ease-out forwards;
@@ -128,10 +142,6 @@
                 margin-bottom: 3px;
                 font-family: monospace;
             }
-            /* 删除按钮在移动端始终可见（无 hover 概念） */
-            #task-table-body .group button {
-                opacity: 0.6 !important;
-            }
         }
     </style>
 </head>
@@ -140,7 +150,7 @@
     <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
         <div>
             <p class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] font-mono mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif;">CREATION PLAN CHECKLIST</p>
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#d4b886] font-serif font-bold">创作计划清单</h1>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-tight text-[#d4b886] font-bold">创作计划清单</h1>
         </div>
         <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
@@ -173,13 +183,13 @@
 
         <!-- Empty State -->
         <div id="empty-state" class="hidden py-32 text-center">
-            <p class="text-sm text-[#d4b886] font-serif tracking-wide mb-1">暂无相关条目</p>
+            <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
             <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
         </div>
 
     </main>
 
-    <footer class="py-8 sm:py-12 px-4 border-t border-[var(--divider-color)] text-center text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
@@ -272,6 +282,7 @@
 
         let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v8')) || defaultTasks;
         let deleteTargetId = null;
+        let revealedTaskId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -280,6 +291,13 @@
             document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             renderTasks();
+        });
+
+        document.addEventListener('click', () => {
+            if (revealedTaskId) {
+                revealedTaskId = null;
+                renderTasks();
+            }
         });
 
         function applyTheme(theme) {
@@ -394,13 +412,13 @@
             filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             tbody.innerHTML = filtered.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="handleRowClick(event, '${task.id}')" title="点击空白处或双击可编辑该条目">
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="handleRowClick(event, '${task.id}')" ondblclick="handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
                     <td class="py-4 px-2 sm:px-4 whitespace-nowrap">
                         <div class="inline-flex items-center space-x-2">
                             <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
                                 <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
                             </label>
-                            <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="opacity-0 group-hover:opacity-60 hover:opacity-100 transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
+                            <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
                         </div>
@@ -425,6 +443,17 @@
             if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
                 return;
             }
+            event.stopPropagation();
+            revealedTaskId = (revealedTaskId === id) ? null : id;
+            renderTasks();
+        }
+
+        function handleRowDblClick(event, id) {
+            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
+                return;
+            }
+            event.stopPropagation();
+            revealedTaskId = null;
             openModal(id);
         }
 
