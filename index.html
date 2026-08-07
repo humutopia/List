@@ -16,9 +16,6 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
 
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22LIST%22%2C%22short_name%22%3A%22LIST%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230b0b0b%22%2C%22theme_color%22%3A%22%230b0b0b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%25201024%25201024%2527%2520width%253D%2527512%2527%2520height%253D%2527512%2527%253E%253Crect%2520width%253D%25271024%2527%2520height%253D%25271024%2527%2520rx%253D%2527220%2527%2520fill%253D%2527%25230b0b0b%2527%252F%253E%253Cg%2520transform%253D%2527translate(64%252C%252064)%2520scale(0.875)%2527%253E%253Cpath%2520d%253D%2527M263.7906378%2520739.26406548l9.51835315-211.11219104L563.98485165%2520113.00524213l200.86165689%2520140.57875378-291.16398135%2520416.12287366-209.89188939%252069.55719591z%2520m69.80125626-190.85518313l-4.88120672%2520104.94594469%2520106.41030668-35.38874878%2520244.79251747-349.49440182-100.79691896-70.77749757-245.52469847%2520350.71470348z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253Cpath%2520d%253D%2527M373.6666013%2520551.29611613l205.0668165-285.40903863%252033.69497004%252024.21078533-205.06925709%2520285.40903867zM89.77561793%2520764.64634045h729.74040602v61.0150841H89.77561793z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253C%252Fg%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -79,15 +76,10 @@
         }
 
         .row-delete-btn {
-            opacity: 0;
-            pointer-events: none;
+            opacity: 0.5;
             transition: opacity 0.15s ease;
         }
-        .row-revealed .row-delete-btn {
-            opacity: 0.7;
-            pointer-events: auto;
-        }
-        .row-revealed .row-delete-btn:hover {
+        .row-delete-btn:hover {
             opacity: 1;
         }
 
@@ -230,7 +222,7 @@
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
-                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">确认保存</button>
+                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">下一步 (验证口令)</button>
                 </div>
             </form>
         </div>
@@ -243,7 +235,7 @@
             <p class="text-xs text-[#d4b886] mb-6 font-serif opacity-85">确定要移除这条创作计划吗？</p>
             <div class="flex justify-center space-x-3">
                 <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">删除</button>
+                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认删除</button>
             </div>
         </div>
     </div>
@@ -252,12 +244,14 @@
     <div id="password-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-[60] flex items-center justify-center p-4 hidden">
         <div id="password-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">权限验证</h4>
-            <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">请输入管理口令以执行此操作</p>
-            <form onsubmit="submitPassword(event)" class="space-y-4">
+            <p class="text-xs text-[#d4b886] mb-3 font-serif opacity-85">请输入管理口令以执行此操作</p>
+            
+            <form onsubmit="submitPassword(event)" class="space-y-3">
                 <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono text-center focus:outline-none focus:border-[#d4b886]">
-                <div class="flex justify-center space-x-3">
+                <p id="password-error-msg" class="text-[11px] text-red-400 font-mono hidden">口令错误，请重新输入</p>
+                <div class="flex justify-center space-x-3 pt-2">
                     <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                    <button type="submit" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认</button>
+                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">提交发布</button>
                 </div>
             </form>
         </div>
@@ -293,7 +287,6 @@
 
         let tasks = [];
         let deleteTargetId = null;
-        let revealedTaskId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
         let pendingAction = null;
 
@@ -304,6 +297,7 @@
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             alignTitleWidth();
 
+            // 实时监听云端 Firestore 变更
             onSnapshot(tasksCollection, (snapshot) => {
                 tasks = snapshot.docs.map(docSnap => ({
                     id: docSnap.id,
@@ -311,7 +305,7 @@
                 }));
                 renderTasks();
             }, (error) => {
-                console.error("Firestore 同步监听异常:", error);
+                console.error("Firestore 同步异常:", error);
             });
         });
 
@@ -323,13 +317,6 @@
             }
         }
         window.addEventListener('resize', alignTitleWidth);
-
-        document.addEventListener('click', () => {
-            if (revealedTaskId) {
-                revealedTaskId = null;
-                renderTasks();
-            }
-        });
 
         function applyTheme(theme) {
             currentTheme = theme;
@@ -430,10 +417,10 @@
             tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             tbody.innerHTML = tasks.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="window.handleRowClick(event, '${task.id}')" ondblclick="window.handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="window.handleRowClick(event, '${task.id}')" title="点击空白处可编辑该条目">
                     <td class="py-4 px-2 sm:px-4 whitespace-nowrap">
                         <div class="inline-flex items-center space-x-2">
-                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
+                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="勾选状态">
                                 <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" class="minimal-checkbox">
                             </label>
                             <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
@@ -457,17 +444,9 @@
             `).join('');
         }
 
+        // 单击空白区域即可弹窗编辑
         window.handleRowClick = function(event, id) {
             if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) return;
-            event.stopPropagation();
-            revealedTaskId = (revealedTaskId === id) ? null : id;
-            renderTasks();
-        }
-
-        window.handleRowDblClick = function(event, id) {
-            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) return;
-            event.stopPropagation();
-            revealedTaskId = null;
             openModal(id);
         }
 
@@ -475,40 +454,58 @@
         function requestPassword(actionCallback) {
             pendingAction = actionCallback;
             document.getElementById('input-secret-key').value = '';
+            document.getElementById('password-error-msg').classList.add('hidden');
             document.getElementById('password-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('input-secret-key').focus(), 100);
         }
 
         window.closePasswordModal = function() {
             document.getElementById('password-modal').classList.add('hidden');
+            document.getElementById('password-error-msg').classList.add('hidden');
             pendingAction = null;
         }
 
-        window.submitPassword = function(e) {
+        window.submitPassword = async function(e) {
             e.preventDefault();
-            const key = document.getElementById('input-secret-key').value;
-            if (pendingAction) {
-                const action = pendingAction;
+            const keyInput = document.getElementById('input-secret-key');
+            const errorMsg = document.getElementById('password-error-msg');
+            const submitBtn = document.getElementById('password-submit-btn');
+            
+            const key = keyInput.value.trim();
+            if (!pendingAction) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = '验证中...';
+
+            try {
+                // 执行异步数据操作
+                await pendingAction(key);
+                // 验证成功，关闭验证弹窗
                 window.closePasswordModal();
-                action(key);
+            } catch (err) {
+                console.error("提交异常或口令校验拒绝:", err);
+                // 验证失败，显示错误红字提示，保留编辑界面不中断
+                errorMsg.innerText = '口令错误，请重新输入';
+                errorMsg.classList.remove('hidden');
+                keyInput.focus();
+                keyInput.select();
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = '提交发布';
             }
         }
 
-        // --- 数据变更（带密码） ---
+        // --- 数据变更（带有口令校验） ---
         window.toggleTask = function(id) {
             const task = tasks.find(t => t.id === id);
             if (!task) return;
 
             requestPassword(async (secretKey) => {
-                try {
-                    await updateDoc(doc(db, "tasks", id), {
-                        completed: !task.completed,
-                        secretKey: secretKey
-                    });
-                    showToast('已更新状态');
-                } catch (e) {
-                    showToast('口令错误，无法更新');
-                    renderTasks();
-                }
+                await updateDoc(doc(db, "tasks", id), {
+                    completed: !task.completed,
+                    secretKey: secretKey
+                });
+                showToast('已更新状态');
             });
         }
 
@@ -556,13 +553,10 @@
             closeConfirmModal();
 
             requestPassword(async (secretKey) => {
-                try {
-                    await setDoc(doc(db, "tasks", targetId), { secretKey: secretKey }, { merge: true });
-                    await deleteDoc(doc(db, "tasks", targetId));
-                    showToast('已成功删除条目');
-                } catch (e) {
-                    showToast('口令错误，无法删除');
-                }
+                // 将密码与删除请求一并发送给 Firestore Rules 校验
+                await setDoc(doc(db, "tasks", targetId), { secretKey: secretKey }, { merge: true });
+                await deleteDoc(doc(db, "tasks", targetId));
+                showToast('已成功删除条目');
             });
         });
 
@@ -573,8 +567,6 @@
             const theme = document.getElementById('task-theme').value.trim();
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
-
-            closeModal();
 
             requestPassword(async (secretKey) => {
                 const targetDocId = id || Date.now().toString();
@@ -587,12 +579,9 @@
                     secretKey: secretKey
                 };
 
-                try {
-                    await setDoc(doc(db, "tasks", targetDocId), taskData);
-                    showToast(id ? '已更新创作计划' : '已添加新创作计划');
-                } catch (e) {
-                    showToast('口令错误，保存失败');
-                }
+                await setDoc(doc(db, "tasks", targetDocId), taskData);
+                closeModal();
+                showToast(id ? '已更新创作计划' : '已添加新创作计划');
             });
         }
 
