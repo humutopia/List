@@ -75,17 +75,19 @@
             background-color: var(--row-hover-color);
         }
 
-        /* X按钮默认隐藏，鼠标悬浮或触摸激活该行时才显示 */
+        /* 强制隐匿 X 号（高优先级） */
         .row-delete-btn {
-            opacity: 0;
-            pointer-events: none;
+            opacity: 0 !important;
+            pointer-events: none !important;
             transition: opacity 0.2s ease;
         }
+        
+        /* 仅当鼠标悬浮在行上，或触摸点击该行时才彻底激活显示 X 号 */
         .editable-row:hover .row-delete-btn,
         .editable-row:focus-within .row-delete-btn,
         .editable-row.active .row-delete-btn {
-            opacity: 0.7;
-            pointer-events: auto;
+            opacity: 0.7 !important;
+            pointer-events: auto !important;
         }
         .row-delete-btn:hover {
             opacity: 1 !important;
@@ -147,11 +149,6 @@
                 opacity: 0.55;
                 margin-bottom: 3px;
                 font-family: monospace;
-            }
-            /* 移动端只要悬浮或点击后直接让X号可见 */
-            .row-delete-btn {
-                opacity: 0.6;
-                pointer-events: auto;
             }
         }
     </style>
@@ -458,6 +455,12 @@
 
         window.handleRowClick = function(event, id) {
             if (event.target.closest('button') || event.target.closest('label')) return;
+            
+            // 消除/激活此行的 class 样式，确保 X 号在点击事件后正常显隐
+            document.querySelectorAll('.editable-row').forEach(row => row.classList.remove('active'));
+            const currentRow = event.currentTarget;
+            if (currentRow) currentRow.classList.add('active');
+
             openModal(id);
         }
 
@@ -502,7 +505,6 @@
             }
         }
 
-        // 点击对勾框：校验口令通过后才更新选定状态（显示/取消对勾）
         window.toggleTask = function(id) {
             const task = tasks.find(t => t.id === id);
             if (!task) return;
