@@ -75,12 +75,20 @@
             background-color: var(--row-hover-color);
         }
 
+        /* X按钮默认隐藏，鼠标悬浮或触摸激活该行时才显示 */
         .row-delete-btn {
-            opacity: 0.5;
-            transition: opacity 0.15s ease;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .editable-row:hover .row-delete-btn,
+        .editable-row:focus-within .row-delete-btn,
+        .editable-row.active .row-delete-btn {
+            opacity: 0.7;
+            pointer-events: auto;
         }
         .row-delete-btn:hover {
-            opacity: 1;
+            opacity: 1 !important;
         }
 
         .fade-in {
@@ -139,6 +147,11 @@
                 opacity: 0.55;
                 margin-bottom: 3px;
                 font-family: monospace;
+            }
+            /* 移动端只要悬浮或点击后直接让X号可见 */
+            .row-delete-btn {
+                opacity: 0.6;
+                pointer-events: auto;
             }
         }
     </style>
@@ -240,7 +253,7 @@
         </div>
     </div>
 
-    <!-- Password Modal (密码验证弹窗) -->
+    <!-- Password Modal -->
     <div id="password-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-[60] flex items-center justify-center p-4 hidden">
         <div id="password-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">权限验证</h4>
@@ -251,7 +264,7 @@
                 <p id="password-error-msg" class="text-[11px] text-red-400 font-mono hidden">口令错误，请重新输入</p>
                 <div class="flex justify-center space-x-3 pt-2">
                     <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">提交发布</button>
+                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认提交</button>
                 </div>
             </form>
         </div>
@@ -297,7 +310,6 @@
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             alignTitleWidth();
 
-            // 实时监听云端 Firestore 变更
             onSnapshot(tasksCollection, (snapshot) => {
                 tasks = snapshot.docs.map(docSnap => ({
                     id: docSnap.id,
@@ -417,11 +429,11 @@
             tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             tbody.innerHTML = tasks.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="window.handleRowClick(event, '${task.id}')" title="点击空白处可编辑该条目">
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''}" onclick="window.handleRowClick(event, '${task.id}')">
                     <td class="py-4 px-2 sm:px-4 whitespace-nowrap">
                         <div class="inline-flex items-center space-x-2">
-                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="勾选状态">
-                                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" class="minimal-checkbox">
+                            <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation(); window.toggleTask('${task.id}')" title="勾选状态">
+                                <input type="checkbox" ${task.completed ? 'checked' : ''} readonly onclick="return false;" class="minimal-checkbox">
                             </label>
                             <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -444,13 +456,11 @@
             `).join('');
         }
 
-        // 单击空白区域即可弹窗编辑
         window.handleRowClick = function(event, id) {
-            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) return;
+            if (event.target.closest('button') || event.target.closest('label')) return;
             openModal(id);
         }
 
-        // --- 验证弹窗控制器 ---
         function requestPassword(actionCallback) {
             pendingAction = actionCallback;
             document.getElementById('input-secret-key').value = '';
@@ -478,24 +488,21 @@
             submitBtn.innerText = '验证中...';
 
             try {
-                // 执行异步数据操作
                 await pendingAction(key);
-                // 验证成功，关闭验证弹窗
                 window.closePasswordModal();
             } catch (err) {
-                console.error("提交异常或口令校验拒绝:", err);
-                // 验证失败，显示错误红字提示，保留编辑界面不中断
+                console.error("提交异常或口令错误:", err);
                 errorMsg.innerText = '口令错误，请重新输入';
                 errorMsg.classList.remove('hidden');
                 keyInput.focus();
                 keyInput.select();
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerText = '提交发布';
+                submitBtn.innerText = '确认提交';
             }
         }
 
-        // --- 数据变更（带有口令校验） ---
+        // 点击对勾框：校验口令通过后才更新选定状态（显示/取消对勾）
         window.toggleTask = function(id) {
             const task = tasks.find(t => t.id === id);
             if (!task) return;
@@ -553,7 +560,6 @@
             closeConfirmModal();
 
             requestPassword(async (secretKey) => {
-                // 将密码与删除请求一并发送给 Firestore Rules 校验
                 await setDoc(doc(db, "tasks", targetId), { secretKey: secretKey }, { merge: true });
                 await deleteDoc(doc(db, "tasks", targetId));
                 showToast('已成功删除条目');
