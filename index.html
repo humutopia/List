@@ -149,8 +149,8 @@
 
     <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
         <div>
-            <p class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] font-mono mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif;">CREATION PLAN CHECKLIST</p>
-            <h1 class="text-2xl sm:text-3xl md:text-4xl tracking-tight text-[#d4b886] font-bold">创作计划清单</h1>
+            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
+            <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
         <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
@@ -196,7 +196,7 @@
     <!-- Add Plan Button (+ 新计划，与内容容器右边缘对齐，跟随页面最大宽度而非浏览器视口边缘) -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
-            <button onclick="openModal()" class="pointer-events-auto px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-medium shadow-lg whitespace-nowrap">
+            <button onclick="openModal()" class="pointer-events-auto px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 shadow-lg whitespace-nowrap" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: normal;">
                 + 新计划
             </button>
         </div>
@@ -291,7 +291,20 @@
             document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             renderTasks();
+            alignTitleWidth();
         });
+
+        function alignTitleWidth() {
+            const label = document.getElementById('title-label');
+            const title = document.getElementById('main-title');
+            if (label && title) {
+                title.style.width = label.getBoundingClientRect().width + 'px';
+            }
+        }
+        window.addEventListener('resize', alignTitleWidth);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(alignTitleWidth);
+        }
 
         document.addEventListener('click', () => {
             if (revealedTaskId) {
