@@ -26,6 +26,15 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        /* 统一表格及卡片内部所有文本的字体与字重 */
+        table, tbody, tr, td, th {
+            font-family: 'Newsreader', 'Noto Serif SC', serif !important;
+        }
+
+        .font-mono-custom {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        }
+
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -75,22 +84,9 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 强制隐匿 X 号（高优先级） */
+        /* 彻底移除所有视图下的删除X号，统一移至点击条目编辑/在模组内处理 */
         .row-delete-btn {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            transition: opacity 0.2s ease;
-        }
-        
-        /* 仅当鼠标悬浮在行上，或触摸点击该行时才彻底激活显示 X 号 */
-        .editable-row:hover .row-delete-btn,
-        .editable-row:focus-within .row-delete-btn,
-        .editable-row.active .row-delete-btn {
-            opacity: 0.7 !important;
-            pointer-events: auto !important;
-        }
-        .row-delete-btn:hover {
-            opacity: 1 !important;
+            display: none !important;
         }
 
         .fade-in {
@@ -148,10 +144,10 @@
                 white-space: normal !important;
                 border: none !important;
             }
-            /* 顶部状态栏：复选框与删除按钮水平排布 */
+            /* 顶部状态栏：复选框左侧对齐 */
             #task-table-body td:first-child {
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
                 align-items: center;
                 border-bottom: 1px dashed var(--sub-divider-color, #262626) !important;
                 padding-bottom: 8px !important;
@@ -166,7 +162,7 @@
                 text-transform: uppercase;
                 opacity: 0.5;
                 margin-right: 6px;
-                font-family: monospace;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
             }
             #task-table-body td[data-label="主题"] {
                 font-size: 13px;
@@ -179,11 +175,6 @@
                 border-top: 1px solid var(--sub-divider-color, #262626);
                 opacity: 0.9;
             }
-            /* 移动端默认放开删除按钮显隐，确保二维卡片交互直观 */
-            .row-delete-btn {
-                opacity: 0.7 !important;
-                pointer-events: auto !important;
-            }
         }
     </style>
 </head>
@@ -191,14 +182,14 @@
 
     <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
         <div>
-            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
+            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3 font-mono-custom" style="font-weight: bold;">CREATION PLAN CHECKLIST</p>
             <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
             </button>
-            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider inline-block text-right"></span>
+            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono-custom tracking-wider inline-block text-right"></span>
         </div>
     </header>
 
@@ -206,7 +197,7 @@
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono">
+                    <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono-custom">
                         <th class="py-3 px-2 sm:px-4 font-normal w-20 sm:w-24">状态</th>
                         <th class="py-3 px-3 sm:px-6 font-normal w-24 sm:w-32">日期</th>
                         <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">主题</th>
@@ -221,17 +212,17 @@
 
         <div id="empty-state" class="hidden py-32 text-center">
             <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
-            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
+            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono-custom">点击右下角 + 新计划开始记录</p>
         </div>
     </main>
 
-    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono-custom opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
-            <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
+            <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono-custom font-normal shadow-lg whitespace-nowrap">
                 + 新计划
             </button>
         </div>
@@ -241,32 +232,35 @@
     <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-5 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
-                <h3 id="modal-title" class="text-sm tracking-widest uppercase font-mono text-[#d4b886]">新增创作计划</h3>
+                <h3 id="modal-title" class="text-sm tracking-widest uppercase font-mono-custom text-[#d4b886]">新增创作计划</h3>
                 <button onclick="closeModal()" class="text-[#d4b886] hover:opacity-100 opacity-70 transition-opacity">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <form id="task-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
                 <input type="hidden" id="task-id">
-                <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">日期</label>
-                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
+                <div class="flex justify-between items-center mb-2" id="edit-delete-container">
+                    <button type="button" id="delete-btn-in-modal" onclick="promptDeleteCurrent()" class="text-[11px] text-red-400 hover:text-red-300 font-mono-custom hidden underline">删除此条目</button>
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">主题</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono-custom">日期</label>
+                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono-custom focus:outline-none focus:border-[#d4b886]">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono-custom">主题</label>
                     <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">配乐</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono-custom">配乐</label>
                     <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono-custom">文案</label>
                     <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
-                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">下一步 (验证口令)</button>
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono-custom">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono-custom font-medium">下一步 (验证口令)</button>
                 </div>
             </form>
         </div>
@@ -275,11 +269,11 @@
     <!-- Confirm Delete Modal -->
     <div id="confirm-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="confirm-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
-            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
+            <h4 class="text-xs uppercase tracking-widest font-mono-custom text-[#d4b886] mb-2">删除确认</h4>
             <p class="text-xs text-[#d4b886] mb-6 font-serif opacity-85">确定要移除这条创作计划吗？</p>
             <div class="flex justify-center space-x-3">
-                <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认删除</button>
+                <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono-custom">取消</button>
+                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono-custom font-medium">确认删除</button>
             </div>
         </div>
     </div>
@@ -287,22 +281,22 @@
     <!-- Password Modal -->
     <div id="password-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-[60] flex items-center justify-center p-4 hidden">
         <div id="password-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
-            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">权限验证</h4>
+            <h4 class="text-xs uppercase tracking-widest font-mono-custom text-[#d4b886] mb-2">权限验证</h4>
             <p class="text-xs text-[#d4b886] mb-3 font-serif opacity-85">请输入管理口令以执行此操作</p>
             
             <form onsubmit="submitPassword(event)" class="space-y-3">
-                <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono text-center focus:outline-none focus:border-[#d4b886]">
-                <p id="password-error-msg" class="text-[11px] text-red-400 font-mono hidden">口令错误，请重新输入</p>
+                <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono-custom text-center focus:outline-none focus:border-[#d4b886]">
+                <p id="password-error-msg" class="text-[11px] text-red-400 font-mono-custom hidden">口令错误，请重新输入</p>
                 <div class="flex justify-center space-x-3 pt-2">
-                    <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认提交</button>
+                    <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono-custom">取消</button>
+                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono-custom font-medium">确认提交</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
+    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono-custom tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -468,12 +462,9 @@
                             <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation(); window.toggleTask('${task.id}')" title="勾选状态">
                                 <input type="checkbox" ${task.completed ? 'checked' : ''} readonly onclick="return false;" class="minimal-checkbox">
                             </label>
-                            <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            </button>
                         </div>
                     </td>
-                    <td class="py-4 px-3 sm:px-6 text-[11px] font-mono whitespace-nowrap" data-label="日期">
+                    <td class="py-4 px-3 sm:px-6 text-[11px] font-mono-custom whitespace-nowrap" data-label="日期">
                         ${task.date}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs font-medium" data-label="主题">
@@ -556,6 +547,7 @@
         window.openModal = function(editId = null) {
             const modal = document.getElementById('task-modal');
             const form = document.getElementById('task-form');
+            const deleteBtnInModal = document.getElementById('delete-btn-in-modal');
             form.reset();
             
             if (editId) {
@@ -567,11 +559,15 @@
                     document.getElementById('task-theme').value = task.theme;
                     document.getElementById('task-bgm').value = task.bgm;
                     document.getElementById('task-copywriting').value = task.copywriting;
+                    deleteTargetId = task.id;
+                    if (deleteBtnInModal) deleteBtnInModal.classList.remove('hidden');
                 }
             } else {
                 document.getElementById('modal-title').innerText = '新增创作计划';
                 document.getElementById('task-id').value = '';
                 document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
+                deleteTargetId = null;
+                if (deleteBtnInModal) deleteBtnInModal.classList.add('hidden');
             }
 
             modal.classList.remove('hidden');
@@ -579,6 +575,13 @@
 
         window.closeModal = function() {
             document.getElementById('task-modal').classList.add('hidden');
+        }
+
+        window.promptDeleteCurrent = function() {
+            const id = document.getElementById('task-id').value;
+            if (!id) return;
+            closeModal();
+            window.promptDelete(id);
         }
 
         window.promptDelete = function(id) {
