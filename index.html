@@ -113,42 +113,76 @@
             border-radius: 2px;
         }
 
+        /* 移动端二维卡片网格样式重构 */
         @media (max-width: 1023px) {
-            #task-table-body,
-            #task-table-body tr,
-            #task-table-body td {
+            table, thead, tbody, tr, td {
                 display: block;
                 width: 100%;
             }
-            table, tbody { width: 100%; }
-            thead { display: none; }
+            thead {
+                display: none;
+            }
+            #task-table-body {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+            @media (max-width: 640px) {
+                #task-table-body {
+                    grid-template-columns: 1fr; /* 极窄屏幕单列卡片 */
+                }
+            }
             #task-table-body tr {
                 border: 1px solid var(--sub-divider-color, #262626);
-                margin-bottom: 14px;
-                padding: 14px 4px;
-                border-radius: 2px;
+                background-color: var(--card-bg, rgba(255, 255, 255, 0.01));
+                margin-bottom: 0;
+                padding: 14px;
+                border-radius: 4px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                position: relative;
             }
             #task-table-body td {
-                padding: 6px 8px !important;
+                padding: 4px 0 !important;
                 white-space: normal !important;
+                border: none !important;
             }
+            /* 顶部状态栏：复选框与删除按钮水平排布 */
             #task-table-body td:first-child {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px dashed var(--sub-divider-color, #262626);
-                padding-bottom: 10px !important;
-                margin-bottom: 6px;
+                border-bottom: 1px dashed var(--sub-divider-color, #262626) !important;
+                padding-bottom: 8px !important;
+                margin-bottom: 8px;
             }
+            /* 移动端卡片内部字段名标签 */
             #task-table-body td[data-label]:not(:first-child)::before {
                 content: attr(data-label);
-                display: block;
+                display: inline-block;
                 font-size: 9px;
                 letter-spacing: 0.15em;
                 text-transform: uppercase;
-                opacity: 0.55;
-                margin-bottom: 3px;
+                opacity: 0.5;
+                margin-right: 6px;
                 font-family: monospace;
+            }
+            #task-table-body td[data-label="主题"] {
+                font-size: 13px;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            #task-table-body td[data-label="文案"] {
+                margin-top: 4px;
+                padding-top: 6px !important;
+                border-top: 1px solid var(--sub-divider-color, #262626);
+                opacity: 0.9;
+            }
+            /* 移动端默认放开删除按钮显隐，确保二维卡片交互直观 */
+            .row-delete-btn {
+                opacity: 0.7 !important;
+                pointer-events: auto !important;
             }
         }
     </style>
@@ -349,6 +383,7 @@
                 body.style.setProperty('--sub-divider-color', '#e8e2d5');
                 body.style.setProperty('--scrollbar-color', '#d5d0c7');
                 body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
+                body.style.setProperty('--card-bg', '#f4f2ec');
 
                 body.style.backgroundColor = '#fbfbf9';
                 body.style.color = '#2c2825';
@@ -379,6 +414,7 @@
                 body.style.setProperty('--sub-divider-color', '#262626');
                 body.style.setProperty('--scrollbar-color', '#262626');
                 body.style.setProperty('--row-hover-color', 'rgba(255,255,255,0.025)');
+                body.style.setProperty('--card-bg', '#141414');
 
                 body.style.backgroundColor = '#0b0b0b';
                 body.style.color = '#d4b886';
@@ -456,7 +492,6 @@
         window.handleRowClick = function(event, id) {
             if (event.target.closest('button') || event.target.closest('label')) return;
             
-            // 消除/激活此行的 class 样式，确保 X 号在点击事件后正常显隐
             document.querySelectorAll('.editable-row').forEach(row => row.classList.remove('active'));
             const currentRow = event.currentTarget;
             if (currentRow) currentRow.classList.add('active');
