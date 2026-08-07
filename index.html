@@ -12,24 +12,22 @@
     <meta name="apple-mobile-web-app-title" content="LIST">
     <meta name="theme-color" content="#0b0b0b" id="meta-theme-color">
 
-    <!-- App Icon (SVG Data URI with dark background & gold icon matching the theme) -->
+    <!-- App Icon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
-
-    <!-- Inline Web App Manifest Data URI -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22LIST%22%2C%22short_name%22%3A%22LIST%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230b0b0b%22%2C%22theme_color%22%3A%22%230b0b0b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%25201024%25201024%2527%2520width%253D%2527512%2527%2520height%253D%2527512%2527%253E%253Crect%2520width%253D%25271024%2527%2520height%253D%25271024%2527%2520rx%253D%2527220%2527%2520fill%253D%2527%25230b0b0b%2527%252F%253E%253Cg%2520transform%253D%2527translate(64%252C%252064)%2520scale(0.875)%2527%253E%253Cpath%2520d%253D%2527M263.7906378%2520739.26406548l9.51835315-211.11219104L563.98485165%2520113.00524213l200.86165689%2520140.57875378-291.16398135%2520416.12287366-209.89188939%252069.55719591z%2520m69.80125626-190.85518313l-4.88120672%2520104.94594469%2520106.41030668-35.38874878%2520244.79251747-349.49440182-100.79691896-70.77749757-245.52469847%2520350.71470348z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253Cpath%2520d%253D%2527M373.6666013%2520551.29611613l205.0668165-285.40903863%252033.69497004%252024.21078533-205.06925709%2520285.40903867zM89.77561793%2520764.64634045h729.74040602v61.0150841H89.77561793z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253C%252Fg%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 极简无填充自定义勾选框：打勾时不填充任何背景色，仅保留描边 */
+        /* 极简无填充自定义勾选框 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -59,7 +57,6 @@
             transform: rotate(45deg);
         }
 
-        /* 已完成时方框与文字均变灰色并带划线 */
         .completed-row {
             opacity: 0.4;
             text-decoration: line-through;
@@ -72,7 +69,6 @@
             border-color: var(--completed-color) !important;
         }
 
-        /* 可点击行的悬停反馈 */
         .editable-row {
             cursor: pointer;
             transition: background-color 0.15s ease;
@@ -81,7 +77,6 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示，全设备统一行为 */
         .row-delete-btn {
             opacity: 0;
             pointer-events: none;
@@ -95,7 +90,6 @@
             opacity: 1;
         }
 
-        /* 渐入动效 */
         .fade-in {
             animation: fadeIn 0.25s ease-out forwards;
         }
@@ -104,7 +98,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 隐藏滚动条但保留功能 */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -117,7 +110,6 @@
             border-radius: 2px;
         }
 
-        /* ===== 移动端 + 平板适配：表格转卡片布局（<1024px 均生效，仅桌面端显示表格） ===== */
         @media (max-width: 1023px) {
             #task-table-body,
             #task-table-body tr,
@@ -137,7 +129,6 @@
                 padding: 6px 8px !important;
                 white-space: normal !important;
             }
-            /* 状态行（勾选框+删除按钮）单独一行横排 */
             #task-table-body td:first-child {
                 display: flex;
                 justify-content: space-between;
@@ -146,7 +137,6 @@
                 padding-bottom: 10px !important;
                 margin-bottom: 6px;
             }
-            /* 其余字段前显示标签，方便识别 */
             #task-table-body td[data-label]:not(:first-child)::before {
                 content: attr(data-label);
                 display: block;
@@ -167,7 +157,6 @@
             <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
             <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
-        <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
@@ -177,8 +166,6 @@
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
-        
-        <!-- Table Container -->
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -191,24 +178,21 @@
                     </tr>
                 </thead>
                 <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
-                    <!-- Dynamic Rows -->
                 </tbody>
             </table>
         </div>
 
-        <!-- Empty State -->
         <div id="empty-state" class="hidden py-32 text-center">
             <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
             <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
         </div>
-
     </main>
 
     <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
-    <!-- Add Plan Button (+ 新计划，保留右侧适度间隙) -->
+    <!-- Add Plan Button -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
             <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
@@ -267,46 +251,52 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
-    <script>
-        const defaultTasks = [
-            {
-                id: '1',
-                date: '2026-06-07',
-                theme: '光影与几何结构',
-                bgm: 'Max Richter - On the Nature of Daylight',
-                copywriting: '将焦点对准建筑外立面的阴影，捕捉午后三点钟干净的直线。',
-                completed: true
-            },
-            {
-                id: '2',
-                date: '2026-06-09',
-                theme: '静物与黑白银盐',
-                bgm: 'Ryuichi Sakamoto - Aqua',
-                copywriting: '在低饱和度的环境中，让纸张的纹理自然呼吸。',
-                completed: false
-            },
-            {
-                id: '3',
-                date: '2026-06-14',
-                theme: '独立出版物的排版实验',
-                bgm: 'Nils Frahm - Says',
-                copywriting: '留白不仅是空间，也是一种克制的情绪表达。',
-                completed: false
-            }
-        ];
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v8')) || defaultTasks;
+        // 用户指定的 Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdut-ehczuJVlP95RyIAGW1CTLVq4Ei4k",
+            authDomain: "conplan.firebaseapp.com",
+            projectId: "conplan",
+            storageBucket: "conplan.firebasestorage.app",
+            messagingSenderId: "750282375913",
+            appId: "1:750282375913:web:8dde381098c55921432678"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const tasksCollectionRef = collection(db, 'creation_plans');
+
+        let tasks = [];
         let deleteTargetId = null;
         let revealedTaskId = null;
-        let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
+        let currentTheme = 'dark';
+
+        // 绑定纯云端 Firestore 实时变动监听（完全移除本地存储 fallback）
+        function initSync() {
+            onSnapshot(tasksCollectionRef, (snapshot) => {
+                const loadedTasks = [];
+                snapshot.forEach((docSnap) => {
+                    loadedTasks.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                tasks = loadedTasks;
+                renderTasks();
+            }, (error) => {
+                console.error("Firestore 云端监听失败:", error);
+                showToast("云端同步失败：请检查网络或 Firebase Firestore Rules 读写规则");
+            });
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             applyTheme(currentTheme);
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' };
             document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
-            renderTasks();
+            
             alignTitleWidth();
+            initSync();
         });
 
         function alignTitleWidth() {
@@ -330,7 +320,6 @@
 
         function applyTheme(theme) {
             currentTheme = theme;
-            localStorage.setItem('minimal_editorial_theme', theme);
             const body = document.getElementById('app-body');
             const themeIcon = document.getElementById('theme-icon');
             const modalContent = document.getElementById('modal-content');
@@ -416,15 +405,11 @@
             }
         }
 
-        function saveToStorage() {
-            localStorage.setItem('minimal_editorial_tasks_v8', JSON.stringify(tasks));
-        }
-
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
             toast.style.opacity = '1';
-            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+            setTimeout(() => { toast.style.opacity = '0'; }, 3000);
         }
 
         function renderTasks() {
@@ -488,12 +473,21 @@
             openModal(id);
         }
 
-        function toggleTask(id) {
+        async function toggleTask(id) {
             const task = tasks.find(t => t.id === id);
-            if (task) {
-                task.completed = !task.completed;
-                saveToStorage();
-                renderTasks();
+            if (!task) return;
+
+            try {
+                await setDoc(doc(tasksCollectionRef, id), {
+                    date: task.date,
+                    theme: task.theme,
+                    bgm: task.bgm,
+                    copywriting: task.copywriting,
+                    completed: !task.completed
+                });
+            } catch (err) {
+                console.error("更新状态失败:", err);
+                showToast("操作失败：请检查 Firebase 规则设置");
             }
         }
 
@@ -535,49 +529,42 @@
             document.getElementById('confirm-modal').classList.add('hidden');
         }
 
-        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+        document.getElementById('confirm-yes-btn').addEventListener('click', async () => {
             if (deleteTargetId) {
-                tasks = tasks.filter(t => t.id !== deleteTargetId);
-                saveToStorage();
-                renderTasks();
-                showToast('已成功删除条目');
+                try {
+                    await deleteDoc(doc(tasksCollectionRef, deleteTargetId));
+                    showToast('已成功删除条目');
+                } catch (err) {
+                    console.error("删除失败:", err);
+                    showToast('删除失败：请检查 Firebase 规则设置');
+                }
                 closeConfirmModal();
             }
         });
 
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
+
             const id = document.getElementById('task-id').value;
             const date = document.getElementById('task-date').value;
             const theme = document.getElementById('task-theme').value.trim();
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
 
-            if (id) {
-                const task = tasks.find(t => t.id === id);
-                if (task) {
-                    task.date = date;
-                    task.theme = theme;
-                    task.bgm = bgm;
-                    task.copywriting = copywriting;
-                    showToast('已更新创作计划');
-                }
-            } else {
-                const newTask = {
-                    id: Date.now().toString(),
-                    date,
-                    theme,
-                    bgm,
-                    copywriting,
-                    completed: false
-                };
-                tasks.push(newTask);
-                showToast('已添加新创作计划');
-            }
+            const taskId = id || Date.now().toString();
+            const existingTask = tasks.find(t => t.id === taskId);
+            const completed = existingTask ? existingTask.completed : false;
 
-            saveToStorage();
-            renderTasks();
-            closeModal();
+            const newTaskData = { date, theme, bgm, copywriting, completed };
+
+            try {
+                await setDoc(doc(tasksCollectionRef, taskId), newTaskData);
+                showToast(id ? '已更新创作计划' : '已添加新创作计划');
+                closeModal();
+            } catch (err) {
+                console.error("保存失败:", err);
+                showToast("保存失败：请检查 Firebase 规则设置");
+            }
         }
 
         function escapeHTML(str) {
@@ -585,6 +572,17 @@
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
+
+        // 挂载函数至全局
+        window.toggleTheme = toggleTheme;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.promptDelete = promptDelete;
+        window.closeConfirmModal = closeConfirmModal;
+        window.handleFormSubmit = handleFormSubmit;
+        window.handleRowClick = handleRowClick;
+        window.handleRowDblClick = handleRowDblClick;
+        window.toggleTask = toggleTask;
     </script>
 </body>
 </html>
