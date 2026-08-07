@@ -4,27 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>创作计划清单 — Minimal Editorial</title>
-
-    <!-- PWA Theme Color -->
-    <meta name="theme-color" content="#0b0b0b">
-
-    <!-- iOS PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Ming">
-    <link rel="apple-touch-icon" href="./logo.png">
-
-    <!-- Web App Manifest (Data URI 内嵌模式，单文件即开即用) -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Revolutionary Story","short_name":"Ming","description":"Revolutionary Romanticism & Visual Storytelling","start_url":"./index.html","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","orientation":"portrait","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"logo.png","sizes":"512x512","type":"image/png"}]}'>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./logo.png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <style>
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
@@ -83,7 +66,7 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其展开后显示 */
+        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示，全设备统一行为 */
         .row-delete-btn {
             opacity: 0;
             pointer-events: none;
@@ -119,7 +102,7 @@
             border-radius: 2px;
         }
 
-        /* 移动端 + 平板适配：表格转卡片布局 */
+        /* ===== 移动端 + 平板适配：表格转卡片布局（<1024px 均生效，仅桌面端显示表格） ===== */
         @media (max-width: 1023px) {
             #task-table-body,
             #task-table-body tr,
@@ -139,6 +122,7 @@
                 padding: 6px 8px !important;
                 white-space: normal !important;
             }
+            /* 状态行（勾选框+删除按钮）单独一行横排 */
             #task-table-body td:first-child {
                 display: flex;
                 justify-content: space-between;
@@ -147,6 +131,7 @@
                 padding-bottom: 10px !important;
                 margin-bottom: 6px;
             }
+            /* 其余字段前显示标签，方便识别 */
             #task-table-body td[data-label]:not(:first-child)::before {
                 content: attr(data-label);
                 display: block;
@@ -167,6 +152,7 @@
             <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
             <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
+        <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
@@ -176,6 +162,8 @@
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
+        
+        <!-- Table Container -->
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -193,16 +181,19 @@
             </table>
         </div>
 
+        <!-- Empty State -->
         <div id="empty-state" class="hidden py-32 text-center">
             <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
             <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
         </div>
+
     </main>
 
     <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
+    <!-- Add Plan Button (+ 新计划，保留右侧适度间隙) -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
             <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
@@ -301,7 +292,6 @@
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             renderTasks();
             alignTitleWidth();
-            initServiceWorker();
         });
 
         function alignTitleWidth() {
@@ -576,35 +566,6 @@
             return str.replace(/[&<>'"]/g, 
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
-        }
-
-        // PWA Service Worker 注册逻辑 (优先调用 sw.js，同时支持 Blob 动态备用)
-        function initServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                const swContent = `
-                    const CACHE_NAME = 'minimal-editorial-v1';
-                    self.addEventListener('install', (e) => self.skipWaiting());
-                    self.addEventListener('activate', (e) => self.clients.claim());
-                    self.addEventListener('fetch', (e) => {
-                        if (e.request.method !== 'GET') return;
-                        e.respondWith(
-                            fetch(e.request).then(response => {
-                                const clone = response.clone();
-                                caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-                                return response;
-                            }).catch(() => caches.match(e.request))
-                        );
-                    });
-                `;
-
-                navigator.serviceWorker.register('./sw.js')
-                    .catch(() => {
-                        const blob = new Blob([swContent], { type: 'application/javascript' });
-                        return navigator.serviceWorker.register(URL.createObjectURL(blob));
-                    })
-                    .then(reg => console.log('ServiceWorker Ready'))
-                    .catch(err => console.log('ServiceWorker Info:', err));
-            }
         }
     </script>
 </body>
