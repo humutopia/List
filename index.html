@@ -113,7 +113,7 @@
             table, tbody { width: 100%; }
             thead { display: none; }
             #task-table-body tr {
-                border: 1px solid var(--sub-divider-color, #181818);
+                border: 1px solid var(--sub-divider-color, #262626);
                 margin-bottom: 14px;
                 padding: 14px 4px;
                 border-radius: 2px;
@@ -127,7 +127,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 1px dashed var(--sub-divider-color, #181818);
+                border-bottom: 1px dashed var(--sub-divider-color, #262626);
                 padding-bottom: 10px !important;
                 margin-bottom: 6px;
             }
@@ -193,10 +193,10 @@
         <p>©️ 2026 Z_Z</p>
     </footer>
 
-    <!-- Add Plan Button (+ 新计划，与内容容器右边缘对齐，跟随页面最大宽度而非浏览器视口边缘) -->
+    <!-- Add Plan Button (+ 新计划，保留右侧适度间隙) -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
-            <button onclick="openModal()" class="pointer-events-auto px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 shadow-lg whitespace-nowrap mr-3 sm:mr-6" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: normal;">
+            <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
                 + 新计划
             </button>
         </div>
@@ -330,7 +330,7 @@
                 body.style.setProperty('--check-color', '#2c2825');
                 body.style.setProperty('--completed-color', '#948c85');
                 body.style.setProperty('--divider-color', '#e5e2db');
-                body.style.setProperty('--sub-divider-color', '#f0ede6');
+                body.style.setProperty('--sub-divider-color', '#e8e2d5');
                 body.style.setProperty('--scrollbar-color', '#d5d0c7');
                 body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
 
@@ -362,7 +362,7 @@
                 body.style.setProperty('--check-color', '#d4b886');
                 body.style.setProperty('--completed-color', '#8c7d62');
                 body.style.setProperty('--divider-color', '#222222');
-                body.style.setProperty('--sub-divider-color', '#181818');
+                body.style.setProperty('--sub-divider-color', '#262626');
                 body.style.setProperty('--scrollbar-color', '#262626');
                 body.style.setProperty('--row-hover-color', 'rgba(255,255,255,0.025)');
 
