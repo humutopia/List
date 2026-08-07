@@ -84,7 +84,6 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 彻底移除所有视图下的删除X号，统一移至点击条目编辑/在模组内处理 */
         .row-delete-btn {
             display: none !important;
         }
@@ -109,7 +108,7 @@
             border-radius: 2px;
         }
 
-        /* 移动端二维卡片网格样式重构 */
+        /* 移动端二维卡片网格样式重构（完全匹配截图字体与风格） */
         @media (max-width: 1023px) {
             table, thead, tbody, tr, td {
                 display: block;
@@ -125,7 +124,7 @@
             }
             @media (max-width: 640px) {
                 #task-table-body {
-                    grid-template-columns: 1fr; /* 极窄屏幕单列卡片 */
+                    grid-template-columns: 1fr;
                 }
             }
             #task-table-body tr {
@@ -143,6 +142,7 @@
                 padding: 4px 0 !important;
                 white-space: normal !important;
                 border: none !important;
+                font-family: 'Newsreader', 'Noto Serif SC', serif !important;
             }
             /* 顶部状态栏：复选框左侧对齐 */
             #task-table-body td:first-child {
@@ -153,16 +153,15 @@
                 padding-bottom: 8px !important;
                 margin-bottom: 8px;
             }
-            /* 恢复移动端卡片内部字段名标签的原始mono等宽字体 */
+            /* 严格让日期、主题、配乐、文案等字段名标签也使用衬线体，彻底与图一致 */
             #task-table-body td[data-label]:not(:first-child)::before {
                 content: attr(data-label);
                 display: inline-block;
-                font-size: 9px;
-                letter-spacing: 0.15em;
-                text-transform: uppercase;
-                opacity: 0.5;
+                font-size: 11px;
+                letter-spacing: 0.1em;
+                opacity: 0.6;
                 margin-right: 6px;
-                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+                font-family: 'Newsreader', 'Noto Serif SC', serif !important;
             }
             #task-table-body td[data-label="主题"] {
                 font-size: 13px;
@@ -325,7 +324,7 @@
 
         let tasks = [];
         let deleteTargetId = null;
-        let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
+        let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'light'; // 默认匹配图片浅色护眼风格
         let pendingAction = null;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -370,14 +369,14 @@
                 if (metaTheme) metaTheme.setAttribute('content', '#fbfbf9');
                 body.style.setProperty('--bg-color', '#fbfbf9');
                 body.style.setProperty('--text-color', '#2c2825');
-                body.style.setProperty('--border-color', '#2c2825');
+                body.style.setProperty('--border-color', '#d5d0c7');
                 body.style.setProperty('--check-color', '#2c2825');
                 body.style.setProperty('--completed-color', '#948c85');
                 body.style.setProperty('--divider-color', '#e5e2db');
                 body.style.setProperty('--sub-divider-color', '#e8e2d5');
                 body.style.setProperty('--scrollbar-color', '#d5d0c7');
                 body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
-                body.style.setProperty('--card-bg', '#f4f2ec');
+                body.style.setProperty('--card-bg', '#fcfbf9');
 
                 body.style.backgroundColor = '#fbfbf9';
                 body.style.color = '#2c2825';
@@ -401,7 +400,7 @@
                 if (metaTheme) metaTheme.setAttribute('content', '#0b0b0b');
                 body.style.setProperty('--bg-color', '#0b0b0b');
                 body.style.setProperty('--text-color', '#d4b886');
-                body.style.setProperty('--border-color', '#d4b886');
+                body.style.setProperty('--border-color', '#2a2a2a');
                 body.style.setProperty('--check-color', '#d4b886');
                 body.style.setProperty('--completed-color', '#8c7d62');
                 body.style.setProperty('--divider-color', '#222222');
@@ -478,6 +477,12 @@
                     </td>
                 </tr>
             `).join('');
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
         }
 
         window.handleRowClick = function(event, id) {
@@ -614,27 +619,25 @@
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
 
+            closeModal();
+
             requestPassword(async (secretKey) => {
-                const targetDocId = id || Date.now().toString();
-                const taskData = {
+                const targetId = id || 'task_' + Date.now();
+                const existing = tasks.find(t => t.id === targetId);
+
+                const payload = {
                     date,
                     theme,
                     bgm,
                     copywriting,
-                    completed: id ? (tasks.find(t => t.id === id)?.completed || false) : false,
-                    secretKey: secretKey
+                    completed: existing ? existing.completed : false,
+                    secretKey: secretKey,
+                    updatedAt: new Date().toISOString()
                 };
 
-                await setDoc(doc(db, "tasks", targetDocId), taskData);
-                closeModal();
-                showToast(id ? '已更新创作计划' : '已添加新创作计划');
+                await setDoc(doc(db, "tasks", targetId), payload, { merge: true });
+                showToast(id ? '已成功更新计划' : '已成功添加新计划');
             });
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
         }
     </script>
 </body>
