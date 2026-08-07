@@ -16,18 +16,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
 
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22LIST%22%2C%22short_name%22%3A%22LIST%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230b0b0b%22%2C%22theme_color%22%3A%22%230b0b0b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%25201024%25201024%2527%2520width%253D%2527512%2527%2520height%253D%2527512%2527%253E%253Crect%2520width%253D%25271024%2527%2520height%253D%25271024%2527%2520rx%253D%2527220%2527%2520fill%253D%2527%25230b0b0b%2527%252F%253E%253Cg%2520transform%253D%2527translate(64%252C%252064)%2520scale(0.875)%2527%253E%253Cpath%2520d%253D%2527M263.7906378%2520739.26406548l9.51835315-211.11219104L563.98485165%2520113.00524213l200.86165689%2520140.57875378-291.16398135%2520416.12287366-209.89188939%252069.55719591z%2520m69.80125626-190.85518313l-4.88120672%2520104.94594469%2520106.41030668-35.38874878%2520244.79251747-349.49440182-100.79691896-70.77749757-245.52469847%2520350.71470348z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253Cpath%2520d%253D%2527M373.6666013%2520551.29611613l205.0668165-285.40903863%252033.69497004%252024.21078533-205.06925709%2520285.40903867zM89.77561793%2520764.64634045h729.74040602v61.0150841H89.77561793z%2527%2520fill%253D%2527%2523d4b886%2527%252F%253E%253C%252Fg%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <style>
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 极简无填充自定义勾选框 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -192,7 +193,6 @@
         <p>©️ 2026 Z_Z</p>
     </footer>
 
-    <!-- Add Plan Button -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
             <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <!-- Modal Form -->
+    <!-- Task Modal -->
     <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-5 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
@@ -248,14 +248,36 @@
         </div>
     </div>
 
+    <!-- Password Modal (密码验证弹窗) -->
+    <div id="password-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-[60] flex items-center justify-center p-4 hidden">
+        <div id="password-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
+            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">权限验证</h4>
+            <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">请输入管理口令以执行此操作</p>
+            <form onsubmit="submitPassword(event)" class="space-y-4">
+                <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono text-center focus:outline-none focus:border-[#d4b886]">
+                <div class="flex justify-center space-x-3">
+                    <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
+                    <button type="submit" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { 
+            getFirestore, 
+            collection, 
+            onSnapshot, 
+            doc, 
+            setDoc, 
+            deleteDoc, 
+            updateDoc 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 用户指定的 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyCdut-ehczuJVlP95RyIAGW1CTLVq4Ei4k",
             authDomain: "conplan.firebaseapp.com",
@@ -267,36 +289,30 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const tasksCollectionRef = collection(db, 'creation_plans');
+        const tasksCollection = collection(db, "tasks");
 
         let tasks = [];
         let deleteTargetId = null;
         let revealedTaskId = null;
-        let currentTheme = 'dark';
-
-        // 绑定纯云端 Firestore 实时变动监听（完全移除本地存储 fallback）
-        function initSync() {
-            onSnapshot(tasksCollectionRef, (snapshot) => {
-                const loadedTasks = [];
-                snapshot.forEach((docSnap) => {
-                    loadedTasks.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                tasks = loadedTasks;
-                renderTasks();
-            }, (error) => {
-                console.error("Firestore 云端监听失败:", error);
-                showToast("云端同步失败：请检查网络或 Firebase Firestore Rules 读写规则");
-            });
-        }
+        let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
+        let pendingAction = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             applyTheme(currentTheme);
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' };
             document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
-            
             alignTitleWidth();
-            initSync();
+
+            onSnapshot(tasksCollection, (snapshot) => {
+                tasks = snapshot.docs.map(docSnap => ({
+                    id: docSnap.id,
+                    ...docSnap.data()
+                }));
+                renderTasks();
+            }, (error) => {
+                console.error("Firestore 同步监听异常:", error);
+            });
         });
 
         function alignTitleWidth() {
@@ -307,9 +323,6 @@
             }
         }
         window.addEventListener('resize', alignTitleWidth);
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(alignTitleWidth);
-        }
 
         document.addEventListener('click', () => {
             if (revealedTaskId) {
@@ -320,12 +333,13 @@
 
         function applyTheme(theme) {
             currentTheme = theme;
+            localStorage.setItem('minimal_editorial_theme', theme);
             const body = document.getElementById('app-body');
             const themeIcon = document.getElementById('theme-icon');
             const modalContent = document.getElementById('modal-content');
             const confirmContent = document.getElementById('confirm-content');
-            
-            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea');
+            const passwordContent = document.getElementById('password-content');
+            const formInputs = document.querySelectorAll('input:not([type="hidden"]), textarea');
             const metaTheme = document.getElementById('meta-theme-color');
 
             if (theme === 'light') {
@@ -345,16 +359,13 @@
                 
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>';
 
-                if (modalContent) {
-                    modalContent.style.backgroundColor = '#f4f2ec';
-                    modalContent.style.color = '#2c2825';
-                    modalContent.style.borderColor = '#d5d0c7';
-                }
-                if (confirmContent) {
-                    confirmContent.style.backgroundColor = '#f4f2ec';
-                    confirmContent.style.color = '#2c2825';
-                    confirmContent.style.borderColor = '#d5d0c7';
-                }
+                [modalContent, confirmContent, passwordContent].forEach(m => {
+                    if (m) {
+                        m.style.backgroundColor = '#f4f2ec';
+                        m.style.color = '#2c2825';
+                        m.style.borderColor = '#d5d0c7';
+                    }
+                });
 
                 formInputs.forEach(input => {
                     input.style.backgroundColor = '#eae7df';
@@ -378,16 +389,13 @@
 
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"></path>';
 
-                if (modalContent) {
-                    modalContent.style.backgroundColor = '#141414';
-                    modalContent.style.color = '#d4b886';
-                    modalContent.style.borderColor = '#2a2a2a';
-                }
-                if (confirmContent) {
-                    confirmContent.style.backgroundColor = '#141414';
-                    confirmContent.style.color = '#d4b886';
-                    confirmContent.style.borderColor = '#2a2a2a';
-                }
+                [modalContent, confirmContent, passwordContent].forEach(m => {
+                    if (m) {
+                        m.style.backgroundColor = '#141414';
+                        m.style.color = '#d4b886';
+                        m.style.borderColor = '#2a2a2a';
+                    }
+                });
 
                 formInputs.forEach(input => {
                     input.style.backgroundColor = '#1b1b1b';
@@ -397,44 +405,38 @@
             }
         }
 
-        function toggleTheme() {
-            if (currentTheme === 'dark') {
-                applyTheme('light');
-            } else {
-                applyTheme('dark');
-            }
+        window.toggleTheme = function() {
+            applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
             toast.style.opacity = '1';
-            setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
         }
 
         function renderTasks() {
             const tbody = document.getElementById('task-table-body');
             const emptyState = document.getElementById('empty-state');
 
-            let filtered = tasks;
-
-            if (filtered.length === 0) {
+            if (tasks.length === 0) {
                 tbody.innerHTML = '';
                 emptyState.classList.remove('hidden');
                 return;
             }
 
             emptyState.classList.add('hidden');
-            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            tbody.innerHTML = filtered.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="handleRowClick(event, '${task.id}')" ondblclick="handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
+            tbody.innerHTML = tasks.map(task => `
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="window.handleRowClick(event, '${task.id}')" ondblclick="window.handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
                     <td class="py-4 px-2 sm:px-4 whitespace-nowrap">
                         <div class="inline-flex items-center space-x-2">
                             <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
-                                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
+                                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" class="minimal-checkbox">
                             </label>
-                            <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
+                            <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
                         </div>
@@ -443,55 +445,74 @@
                         ${task.date}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs font-medium" data-label="主题">
-                        ${escapeHTML(task.theme)}
+                        ${escapeHTML(task.theme || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs" data-label="配乐">
-                        ${escapeHTML(task.bgm)}
+                        ${escapeHTML(task.bgm || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs leading-relaxed max-w-sm" data-label="文案">
-                        ${escapeHTML(task.copywriting)}
+                        ${escapeHTML(task.copywriting || '')}
                     </td>
                 </tr>
             `).join('');
         }
 
-        function handleRowClick(event, id) {
-            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
-                return;
-            }
+        window.handleRowClick = function(event, id) {
+            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) return;
             event.stopPropagation();
             revealedTaskId = (revealedTaskId === id) ? null : id;
             renderTasks();
         }
 
-        function handleRowDblClick(event, id) {
-            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
-                return;
-            }
+        window.handleRowDblClick = function(event, id) {
+            if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) return;
             event.stopPropagation();
             revealedTaskId = null;
             openModal(id);
         }
 
-        async function toggleTask(id) {
-            const task = tasks.find(t => t.id === id);
-            if (!task) return;
+        // --- 验证弹窗控制器 ---
+        function requestPassword(actionCallback) {
+            pendingAction = actionCallback;
+            document.getElementById('input-secret-key').value = '';
+            document.getElementById('password-modal').classList.remove('hidden');
+        }
 
-            try {
-                await setDoc(doc(tasksCollectionRef, id), {
-                    date: task.date,
-                    theme: task.theme,
-                    bgm: task.bgm,
-                    copywriting: task.copywriting,
-                    completed: !task.completed
-                });
-            } catch (err) {
-                console.error("更新状态失败:", err);
-                showToast("操作失败：请检查 Firebase 规则设置");
+        window.closePasswordModal = function() {
+            document.getElementById('password-modal').classList.add('hidden');
+            pendingAction = null;
+        }
+
+        window.submitPassword = function(e) {
+            e.preventDefault();
+            const key = document.getElementById('input-secret-key').value;
+            if (pendingAction) {
+                const action = pendingAction;
+                window.closePasswordModal();
+                action(key);
             }
         }
 
-        function openModal(editId = null) {
+        // --- 数据变更（带密码） ---
+        window.toggleTask = function(id) {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+
+            requestPassword(async (secretKey) => {
+                try {
+                    await updateDoc(doc(db, "tasks", id), {
+                        completed: !task.completed,
+                        secretKey: secretKey
+                    });
+                    showToast('已更新状态');
+                } catch (e) {
+                    showToast('口令错误，无法更新');
+                    renderTasks();
+                }
+            });
+        }
+
+        window.openModal = function(editId = null) {
             const modal = document.getElementById('task-modal');
             const form = document.getElementById('task-form');
             form.reset();
@@ -515,56 +536,64 @@
             modal.classList.remove('hidden');
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('task-modal').classList.add('hidden');
         }
 
-        function promptDelete(id) {
+        window.promptDelete = function(id) {
             deleteTargetId = id;
             document.getElementById('confirm-modal').classList.remove('hidden');
         }
 
-        function closeConfirmModal() {
+        window.closeConfirmModal = function() {
             deleteTargetId = null;
             document.getElementById('confirm-modal').classList.add('hidden');
         }
 
-        document.getElementById('confirm-yes-btn').addEventListener('click', async () => {
-            if (deleteTargetId) {
+        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+            if (!deleteTargetId) return;
+            const targetId = deleteTargetId;
+            closeConfirmModal();
+
+            requestPassword(async (secretKey) => {
                 try {
-                    await deleteDoc(doc(tasksCollectionRef, deleteTargetId));
+                    await setDoc(doc(db, "tasks", targetId), { secretKey: secretKey }, { merge: true });
+                    await deleteDoc(doc(db, "tasks", targetId));
                     showToast('已成功删除条目');
-                } catch (err) {
-                    console.error("删除失败:", err);
-                    showToast('删除失败：请检查 Firebase 规则设置');
+                } catch (e) {
+                    showToast('口令错误，无法删除');
                 }
-                closeConfirmModal();
-            }
+            });
         });
 
-        async function handleFormSubmit(e) {
+        window.handleFormSubmit = function(e) {
             e.preventDefault();
-
             const id = document.getElementById('task-id').value;
             const date = document.getElementById('task-date').value;
             const theme = document.getElementById('task-theme').value.trim();
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
 
-            const taskId = id || Date.now().toString();
-            const existingTask = tasks.find(t => t.id === taskId);
-            const completed = existingTask ? existingTask.completed : false;
+            closeModal();
 
-            const newTaskData = { date, theme, bgm, copywriting, completed };
+            requestPassword(async (secretKey) => {
+                const targetDocId = id || Date.now().toString();
+                const taskData = {
+                    date,
+                    theme,
+                    bgm,
+                    copywriting,
+                    completed: id ? (tasks.find(t => t.id === id)?.completed || false) : false,
+                    secretKey: secretKey
+                };
 
-            try {
-                await setDoc(doc(tasksCollectionRef, taskId), newTaskData);
-                showToast(id ? '已更新创作计划' : '已添加新创作计划');
-                closeModal();
-            } catch (err) {
-                console.error("保存失败:", err);
-                showToast("保存失败：请检查 Firebase 规则设置");
-            }
+                try {
+                    await setDoc(doc(db, "tasks", targetDocId), taskData);
+                    showToast(id ? '已更新创作计划' : '已添加新创作计划');
+                } catch (e) {
+                    showToast('口令错误，保存失败');
+                }
+            });
         }
 
         function escapeHTML(str) {
@@ -572,17 +601,6 @@
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
-
-        // 挂载函数至全局
-        window.toggleTheme = toggleTheme;
-        window.openModal = openModal;
-        window.closeModal = closeModal;
-        window.promptDelete = promptDelete;
-        window.closeConfirmModal = closeConfirmModal;
-        window.handleFormSubmit = handleFormSubmit;
-        window.handleRowClick = handleRowClick;
-        window.handleRowDblClick = handleRowDblClick;
-        window.toggleTask = toggleTask;
     </script>
 </body>
 </html>
