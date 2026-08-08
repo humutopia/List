@@ -141,24 +141,23 @@
                 display: block;
                 width: 100%;
             }
-            /* 将每一行转变为无边框的流式布局 */
+            /* 将每一行转变为独立的网格卡片 */
             #task-table-body tr {
                 display: grid;
                 grid-template-columns: 1fr 1fr; /* 分配为左右两列 */
-                gap: 8px 12px; /* 设置行间和列间距 */
+                gap: 12px 16px; /* 设置行间和列间距 */
                 width: 100%;
-                /* 移除四周的实线边框，仅保留底部淡淡的分隔线 */
-                border: none;
-                border-bottom: 1px solid var(--row-divider, var(--border-color));
+                /* 恢复卡片感：完整的边框、圆角与间距 */
+                border: 1px solid var(--row-divider, var(--border-color));
                 background-color: var(--row-bg, transparent);
                 color: var(--row-text, var(--text-color));
-                margin-bottom: 0; /* 移除外边距，靠 padding 撑开空间 */
-                padding: 16px 8px; /* 增加上下留白 */
-                border-radius: 0;
+                margin-bottom: 16px; /* 卡片之间的外边距 */
+                padding: 16px; /* 卡片内部留白 */
+                border-radius: 8px; /* 卡片圆角 */
                 box-sizing: border-box;
             }
             #task-table-body tr:last-child {
-                border-bottom: none; /* 最后一行去除底部横线 */
+                margin-bottom: 0; /* 最后一个卡片底边距为0 */
             }
             #task-table-body td {
                 display: block;
@@ -176,8 +175,8 @@
                 display: flex;
                 align-items: center;
                 border-bottom: 1px dashed var(--row-divider, var(--border-color));
-                padding-bottom: 10px !important;
-                margin-bottom: 6px;
+                padding-bottom: 12px !important;
+                margin-bottom: 4px;
             }
             #task-table-body td.status-cell::before {
                 display: none; /* 移动端状态行不显示前缀 */
