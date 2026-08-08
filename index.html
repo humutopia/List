@@ -20,7 +20,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <style>
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
@@ -39,6 +38,7 @@
             position: relative;
             transition: all 0.15s ease;
             outline: none;
+            flex-shrink: 0;
         }
         .minimal-checkbox:checked {
             background-color: transparent !important;
@@ -56,53 +56,79 @@
             transform: rotate(45deg);
         }
 
-        .completed-card {
-            opacity: 0.45;
-            text-decoration: line-through;
-            border-color: var(--completed-border-color) !important;
-        }
-        .completed-card .minimal-checkbox {
-            border-color: var(--completed-color) !important;
-        }
-        .completed-card .minimal-checkbox:checked::after {
-            border-color: var(--completed-color) !important;
-        }
-
-        /* 2D 卡片风格基础设定 */
-        .plan-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--sub-divider-color);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        .task-card {
             position: relative;
+            border: 1px solid var(--sub-divider-color);
+            padding: 18px 20px 20px;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-height: 180px;
         }
-        .plan-card:hover {
+        .task-card:hover {
             border-color: var(--border-color);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+            background-color: var(--row-hover-color);
         }
 
-        /* 删除按钮在卡片右上角或悬浮显示 */
+        .task-card.completed-card {
+            opacity: 0.42;
+        }
+        .task-card.completed-card .card-theme,
+        .task-card.completed-card .card-copy {
+            text-decoration: line-through;
+        }
+        .task-card.completed-card .minimal-checkbox {
+            border-color: var(--completed-color) !important;
+        }
+        .task-card.completed-card .minimal-checkbox:checked::after {
+            border-color: var(--completed-color) !important;
+        }
+
         .card-delete-btn {
-            opacity: 0;
-            pointer-events: none;
+            opacity: 0 !important;
+            pointer-events: none !important;
             transition: opacity 0.2s ease;
         }
-        .plan-card:hover .card-delete-btn,
-        .plan-card:focus-within .card-delete-btn,
-        .plan-card.active .card-delete-btn {
-            opacity: 0.7;
-            pointer-events: auto;
+        .task-card:hover .card-delete-btn,
+        .task-card:focus-within .card-delete-btn,
+        .task-card.active .card-delete-btn {
+            opacity: 0.7 !important;
+            pointer-events: auto !important;
         }
         .card-delete-btn:hover {
             opacity: 1 !important;
         }
 
+        .card-index {
+            font-family: monospace;
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            opacity: 0.45;
+            position: absolute;
+            top: 18px;
+            right: 20px;
+        }
+
+        .card-bgm-row::before {
+            content: '♪';
+            margin-right: 6px;
+            opacity: 0.7;
+            font-size: 11px;
+        }
+
         .fade-in {
             animation: fadeIn 0.25s ease-out forwards;
         }
+        .card-fade-in {
+            animation: cardFadeIn 0.35s ease-out forwards;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -135,9 +161,7 @@
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
-        <!-- 二维卡片网格容器 -->
-        <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- 动态填充卡片 -->
+        <div id="task-card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         </div>
 
         <div id="empty-state" class="hidden py-32 text-center">
@@ -300,11 +324,10 @@
                 body.style.setProperty('--border-color', '#2c2825');
                 body.style.setProperty('--check-color', '#2c2825');
                 body.style.setProperty('--completed-color', '#948c85');
-                body.style.setProperty('--completed-border-color', '#d5d0c7');
                 body.style.setProperty('--divider-color', '#e5e2db');
                 body.style.setProperty('--sub-divider-color', '#e8e2d5');
                 body.style.setProperty('--scrollbar-color', '#d5d0c7');
-                body.style.setProperty('--card-bg', '#f5f3ec');
+                body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
 
                 body.style.backgroundColor = '#fbfbf9';
                 body.style.color = '#2c2825';
@@ -331,11 +354,10 @@
                 body.style.setProperty('--border-color', '#d4b886');
                 body.style.setProperty('--check-color', '#d4b886');
                 body.style.setProperty('--completed-color', '#8c7d62');
-                body.style.setProperty('--completed-border-color', '#222222');
                 body.style.setProperty('--divider-color', '#222222');
                 body.style.setProperty('--sub-divider-color', '#262626');
                 body.style.setProperty('--scrollbar-color', '#262626');
-                body.style.setProperty('--card-bg', '#121212');
+                body.style.setProperty('--row-hover-color', 'rgba(255,255,255,0.025)');
 
                 body.style.backgroundColor = '#0b0b0b';
                 body.style.color = '#d4b886';
@@ -369,8 +391,15 @@
             setTimeout(() => { toast.style.opacity = '0'; }, 2000);
         }
 
+        function formatCardDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[0]}.${parts[1]}.${parts[2]}`;
+        }
+
         function renderTasks() {
-            const grid = document.getElementById('cards-grid');
+            const grid = document.getElementById('task-card-grid');
             const emptyState = document.getElementById('empty-state');
 
             if (tasks.length === 0) {
@@ -382,44 +411,34 @@
             emptyState.classList.add('hidden');
             tasks.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            grid.innerHTML = tasks.map(task => `
-                <div class="plan-card p-5 sm:p-6 flex flex-col justify-between ${task.completed ? 'completed-card' : ''}" onclick="window.handleCardClick(event, '${task.id}')">
-                    <div>
-                        <!-- 卡片顶部：日期与控制按钮 -->
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[11px] font-mono tracking-wider opacity-75">${task.date}</span>
-                            <div class="flex items-center space-x-2">
-                                <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation(); window.toggleTask('${task.id}')" title="勾选状态">
-                                    <input type="checkbox" ${task.completed ? 'checked' : ''} readonly onclick="return false;" class="minimal-checkbox">
-                                </label>
-                                <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="card-delete-btn transition-opacity p-1 text-[var(--text-color)]" title="点击删除条目">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
-                            </div>
-                        </div>
+            grid.innerHTML = tasks.map((task, index) => `
+                <div class="task-card card-fade-in group ${task.completed ? 'completed-card' : ''}" onclick="window.handleCardClick(event, '${task.id}')">
+                    <span class="card-index">${String(index + 1).padStart(2, '0')}</span>
 
-                        <!-- 主题 -->
-                        <h2 class="text-sm font-semibold tracking-wide mb-3 line-clamp-2">${escapeHTML(task.theme || '')}</h2>
-
-                        <!-- 配乐 -->
-                        <div class="mb-3 text-[11px] font-mono opacity-80 flex items-center space-x-1.5">
-                            <svg class="w-3 h-3 shrink-0 opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m-10.5 3v10.5M9 9l-4.5 1.5M19.5 6v10.5M19.5 16.5L9 20.25"></path></svg>
-                            <span class="truncate">${escapeHTML(task.bgm || '')}</span>
-                        </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation(); window.toggleTask('${task.id}')" title="勾选状态">
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} readonly onclick="return false;" class="minimal-checkbox">
+                        </label>
+                        <span class="text-[11px] font-mono tracking-wider opacity-70">${formatCardDate(task.date)}</span>
                     </div>
 
-                    <!-- 文案摘要 -->
-                    <div class="pt-3 mt-3 border-t border-[var(--sub-divider-color)]">
-                        <p class="text-xs leading-relaxed opacity-85 line-clamp-3">${escapeHTML(task.copywriting || '')}</p>
-                    </div>
+                    <h3 class="card-theme text-base font-medium leading-snug mb-3">${escapeHTML(task.theme || '')}</h3>
+
+                    <p class="card-bgm-row text-[11px] font-mono opacity-70 mb-3 truncate flex items-center">${escapeHTML(task.bgm || '')}</p>
+
+                    <p class="card-copy text-xs leading-relaxed opacity-90 flex-grow">${escapeHTML(task.copywriting || '')}</p>
+
+                    <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="card-delete-btn absolute top-4 right-4 p-1 text-[#d4b886]" title="点击删除条目" style="top: 34px;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
                 </div>
             `).join('');
         }
 
         window.handleCardClick = function(event, id) {
             if (event.target.closest('button') || event.target.closest('label')) return;
-            
-            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active'));
+
+            document.querySelectorAll('.task-card').forEach(card => card.classList.remove('active'));
             const currentCard = event.currentTarget;
             if (currentCard) currentCard.classList.add('active');
 
