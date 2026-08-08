@@ -153,7 +153,7 @@
                 width: 100%;
                 /* 增加卡片感的边框、内边距和外边距 */
                 border: 1px solid var(--card-border, var(--border-color));
-                border-radius: 8px;
+                border-radius: 0;
                 margin-bottom: 16px;
                 padding: 16px;
                 box-sizing: border-box;
@@ -203,7 +203,7 @@
 
 <body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
 
-    <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end gap-3 sm:gap-6">
+    <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-4 sm:pb-6 flex flex-row justify-between items-end gap-3 sm:gap-6">
         <div>
             <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
             <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
@@ -217,7 +217,7 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 pt-2 sm:pt-4 pb-8 sm:pb-12">
         <!-- Table Container -->
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse border-none">
