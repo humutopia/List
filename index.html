@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="LIST">
     <meta name="theme-color" content="#0b0b0b" id="meta-theme-color">
 
-    <!-- App Icon (SVG Data URI with dark background & gold icon matching the theme) -->
+    <!-- App Icon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='512' height='512'><rect width='1024' height='1024' rx='220' fill='%230b0b0b'/><g transform='translate(64, 64) scale(0.875)'><path d='M263.7906378 739.26406548l9.51835315-211.11219104L563.98485165 113.00524213l200.86165689 140.57875378-291.16398135 416.12287366-209.89188939 69.55719591z m69.80125626-190.85518313l-4.88120672 104.94594469 106.41030668-35.38874878 244.79251747-349.49440182-100.79691896-70.77749757-245.52469847 350.71470348z' fill='%23d4b886'/><path d='M373.6666013 551.29611613l205.0668165-285.40903863 33.69497004 24.21078533-205.06925709 285.40903867zM89.77561793 764.64634045h729.74040602v61.0150841H89.77561793z' fill='%23d4b886'/></g></svg>">
 
@@ -23,6 +23,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
@@ -81,7 +82,7 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示，全设备统一行为 */
+        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示 */
         .row-delete-btn {
             opacity: 0;
             pointer-events: none;
@@ -117,35 +118,51 @@
             border-radius: 2px;
         }
 
-        /* ===== 移动端 + 平板适配：表格转卡片布局（<1024px 均生效，仅桌面端显示表格） ===== */
+        /* ===== 移动端 + 平板适配：表格转为2x2网格卡片布局（<1024px 均生效） ===== */
         @media (max-width: 1023px) {
-            #task-table-body,
-            #task-table-body tr,
-            #task-table-body td {
+            table, tbody { 
+                display: block; 
+                width: 100%; 
+            }
+            thead { 
+                display: none; 
+            }
+            #task-table-body {
                 display: block;
                 width: 100%;
             }
-            table, tbody { width: 100%; }
-            thead { display: none; }
+            /* 将每一行转变为 Grid 布局 */
             #task-table-body tr {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* 分配为左右两列 */
+                gap: 8px 12px; /* 设置行间和列间距 */
+                width: 100%;
                 border: 1px solid var(--sub-divider-color, #262626);
                 margin-bottom: 14px;
-                padding: 14px 4px;
+                padding: 14px 12px;
                 border-radius: 2px;
+                box-sizing: border-box;
             }
             #task-table-body td {
-                padding: 6px 8px !important;
+                display: block;
+                width: 100%;
+                padding: 0 !important;
                 white-space: normal !important;
+                box-sizing: border-box;
+                word-break: break-word; /* 保证长文案能够换行 */
             }
-            /* 状态行（勾选框+删除按钮）单独一行横排 */
+            
+            /* 状态行（勾选框+删除按钮）横跨所有列，占据首行 */
             #task-table-body td:first-child {
+                grid-column: 1 / -1; 
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 border-bottom: 1px dashed var(--sub-divider-color, #262626);
-                padding-bottom: 10px !important;
-                margin-bottom: 6px;
+                padding-bottom: 12px !important;
+                margin-bottom: 4px;
             }
+            
             /* 其余字段前显示标签，方便识别 */
             #task-table-body td[data-label]:not(:first-child)::before {
                 content: attr(data-label);
@@ -154,12 +171,13 @@
                 letter-spacing: 0.15em;
                 text-transform: uppercase;
                 opacity: 0.55;
-                margin-bottom: 3px;
+                margin-bottom: 4px;
                 font-family: monospace;
             }
         }
     </style>
 </head>
+
 <body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
 
     <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
