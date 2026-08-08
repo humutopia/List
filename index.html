@@ -27,7 +27,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 极简无填充自定义勾选框：打勾时不填充任何背景色，仅保留描边 */
+        /* 极简无填充自定义勾选框 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -211,7 +211,7 @@
                     </tr>
                 </thead>
                 <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
-                    <!-- Dynamic Rows -->
+                    <!-- Dynamic Rows will be injected here -->
                 </tbody>
             </table>
         </div>
@@ -228,7 +228,7 @@
         <p>©️ 2026 Z_Z</p>
     </footer>
 
-    <!-- Add Plan Button (+ 新计划，保留右侧适度间隙) -->
+    <!-- Add Plan Button (+ 新计划) -->
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
             <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
@@ -291,31 +291,80 @@
         const defaultTasks = [
             {
                 id: '1',
-                date: '2026-06-07',
-                theme: '光影与几何结构',
-                bgm: 'Max Richter - On the Nature of Daylight',
-                copywriting: '将焦点对准建筑外立面的阴影，捕捉午后三点钟干净的直线。',
-                completed: true
+                date: '2026-08-10',
+                theme: '电影感夜景街拍',
+                bgm: 'Kavinsky - Nightcall',
+                copywriting: '霓虹灯牌的冷暖交织，捕捉雨后地面积水反射出的赛博朋克边缘，冷峻且疏离。',
+                completed: false
             },
             {
                 id: '2',
-                date: '2026-06-09',
-                theme: '静物与黑白银盐',
-                bgm: 'Ryuichi Sakamoto - Aqua',
-                copywriting: '在低饱和度的环境中，让纸张的纹理自然呼吸。',
+                date: '2026-08-12',
+                theme: '极简咖啡馆角落',
+                bgm: 'Chet Baker - I Fall In Love Too Easily',
+                copywriting: '纯白桌面与原木椅背的几何切割，咖啡杯沿的热气是画面里唯一的动态。',
                 completed: false
             },
             {
                 id: '3',
-                date: '2026-06-14',
+                date: '2026-08-15',
+                theme: '自然纹理与微距',
+                bgm: 'Brian Eno - An Ending (Ascent)',
+                copywriting: '枯叶的脉络和粗糙的树皮，生命的消亡与时间留存都在这些微妙的肌理之中。',
+                completed: true
+            },
+            {
+                id: '4',
+                date: '2026-08-18',
+                theme: '城市废墟与新生',
+                bgm: 'Hans Zimmer - Cornfield Chase',
+                copywriting: '钢筋水泥裂缝中挣扎长出的野草，尝试用低视角去记录这种无声的对抗。',
+                completed: false
+            },
+            {
+                id: '5',
+                date: '2026-08-22',
+                theme: '胶片风日常碎片',
+                bgm: 'Norah Jones - Don\'t Know Why',
+                copywriting: '打翻的牛奶、晾衣绳上随风摆动的白衬衫，用轻微过曝的高光记录夏日慵懒感。',
+                completed: false
+            },
+            {
+                id: '6',
+                date: '2026-08-25',
+                theme: '现代建筑与光影切割',
+                bgm: 'Max Richter - On the Nature of Daylight',
+                copywriting: '寻找下午四点的斜阳，让建筑外立面的硬朗阴影成为画面的主导线条。',
+                completed: true
+            },
+            {
+                id: '7',
+                date: '2026-08-28',
+                theme: '情绪肖像与背影',
+                bgm: 'Billie Eilish - everything i wanted',
+                copywriting: '不露脸的叙事，通过肢体语言、风吹动的发丝和空旷的背景空间来传递内心的孤独。',
+                completed: false
+            },
+            {
+                id: '8',
+                date: '2026-08-31',
+                theme: '雨天倒影与光斑',
+                bgm: 'The Weeknd - Blinding Lights',
+                copywriting: '迷离焦外与车灯光斑，透过沾满雨滴的玻璃窗，城市变得光怪陆离、暧昧不清。',
+                completed: false
+            },
+            {
+                id: '9',
+                date: '2026-09-02',
                 theme: '独立出版物的排版实验',
                 bgm: 'Nils Frahm - Says',
-                copywriting: '留白不仅是空间，也是一种克制的情绪表达。',
+                copywriting: '留白不仅是空间，也是一种克制的情绪表达。感受粗糙纸张纹理赋予文字的温度。',
                 completed: false
             }
         ];
 
-        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v9')) || defaultTasks;
+        // Note: Changed LocalStorage key to v10 so the new 9 templates force-load for users.
+        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v10')) || defaultTasks;
         let deleteTargetId = null;
         let revealedTaskId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
@@ -437,7 +486,7 @@
         }
 
         function saveToStorage() {
-            localStorage.setItem('minimal_editorial_tasks_v9', JSON.stringify(tasks));
+            localStorage.setItem('minimal_editorial_tasks_v10', JSON.stringify(tasks));
         }
 
         function showToast(message) {
