@@ -135,7 +135,7 @@
                 grid-template-columns: 1fr 1fr; /* 分配为左右两列 */
                 gap: 8px 12px; /* 设置行间和列间距 */
                 width: 100%;
-                border: 1px solid var(--sub-divider-color, #262626);
+                border: 1px solid var(--border-color);
                 margin-bottom: 14px;
                 padding: 14px 12px;
                 border-radius: 2px;
@@ -156,7 +156,7 @@
                 grid-row: 1; /* 强制放到第一行 */
                 display: flex;
                 align-items: center;
-                border-bottom: 1px dashed var(--sub-divider-color, #262626);
+                border-bottom: 1px dashed var(--border-color);
                 padding-bottom: 12px !important;
                 margin-bottom: 4px;
             }
@@ -181,17 +181,17 @@
 
 <body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
 
-    <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
+    <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--border-color)] gap-3 sm:gap-6">
         <div>
-            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
-            <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
+            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
+            <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
         <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
-            <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
+            <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
             </button>
-            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider inline-block text-right"></span>
+            <span id="current-date-display" class="text-xs font-mono tracking-wider inline-block text-right"></span>
         </div>
     </header>
 
@@ -201,7 +201,7 @@
         <div class="w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono">
+                    <tr class="border-b border-[var(--border-color)] text-[10px] uppercase tracking-[0.2em] font-mono">
                         <!-- 网页端状态栏移到文案后面 -->
                         <th class="py-3 px-3 sm:px-6 font-normal w-24 sm:w-32">日期</th>
                         <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">主题</th>
@@ -210,7 +210,7 @@
                         <th class="py-3 px-2 sm:px-4 font-normal w-20 sm:w-24 text-right">状态</th>
                     </tr>
                 </thead>
-                <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
+                <tbody id="task-table-body" class="divide-y divide-[var(--border-color)] text-xs">
                     <!-- Dynamic Rows -->
                 </tbody>
             </table>
@@ -218,13 +218,13 @@
 
         <!-- Empty State -->
         <div id="empty-state" class="hidden py-32 text-center">
-            <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
-            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
+            <p class="text-sm tracking-wide mb-1">暂无相关条目</p>
+            <p class="text-[11px] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
         </div>
 
     </main>
 
-    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--border-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
@@ -358,39 +358,42 @@
             
             const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea');
             const metaTheme = document.getElementById('meta-theme-color');
+            const header = document.querySelector('header');
 
             if (theme === 'light') {
                 if (metaTheme) metaTheme.setAttribute('content', '#fbfbf9');
                 body.style.setProperty('--bg-color', '#fbfbf9');
-                body.style.setProperty('--text-color', '#2c2825');
-                body.style.setProperty('--border-color', '#2c2825');
-                body.style.setProperty('--check-color', '#2c2825');
-                body.style.setProperty('--completed-color', '#948c85');
+                body.style.setProperty('--text-color', '#1a1a1a'); 
+                body.style.setProperty('--border-color', '#d4b886'); 
+                body.style.setProperty('--check-color', '#d4b886'); 
+                body.style.setProperty('--completed-color', '#a3a3a3'); 
                 body.style.setProperty('--divider-color', '#e5e2db');
                 body.style.setProperty('--sub-divider-color', '#e8e2d5');
-                body.style.setProperty('--scrollbar-color', '#d5d0c7');
-                body.style.setProperty('--row-hover-color', 'rgba(0,0,0,0.025)');
+                body.style.setProperty('--scrollbar-color', '#d4b886'); 
+                body.style.setProperty('--row-hover-color', 'rgba(212,184,134,0.1)'); 
 
                 body.style.backgroundColor = '#fbfbf9';
-                body.style.color = '#2c2825';
+                body.style.color = '#1a1a1a'; 
                 
+                if (header) header.style.color = '#d4b886';
+
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"></path>';
 
                 if (modalContent) {
                     modalContent.style.backgroundColor = '#f4f2ec';
-                    modalContent.style.color = '#2c2825';
-                    modalContent.style.borderColor = '#d5d0c7';
+                    modalContent.style.color = '#1a1a1a'; 
+                    modalContent.style.borderColor = '#d4b886'; 
                 }
                 if (confirmContent) {
                     confirmContent.style.backgroundColor = '#f4f2ec';
-                    confirmContent.style.color = '#2c2825';
-                    confirmContent.style.borderColor = '#d5d0c7';
+                    confirmContent.style.color = '#1a1a1a'; 
+                    confirmContent.style.borderColor = '#d4b886'; 
                 }
 
                 formInputs.forEach(input => {
                     input.style.backgroundColor = '#eae7df';
-                    input.style.borderColor = '#d0cbc0';
-                    input.style.color = '#2c2825';
+                    input.style.borderColor = '#d4b886'; 
+                    input.style.color = '#1a1a1a'; 
                 });
             } else {
                 if (metaTheme) metaTheme.setAttribute('content', '#0b0b0b');
@@ -406,6 +409,8 @@
 
                 body.style.backgroundColor = '#0b0b0b';
                 body.style.color = '#d4b886';
+
+                if (header) header.style.color = '';
 
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>';
 
@@ -479,7 +484,7 @@
                     <td class="status-cell py-4 px-2 sm:px-4 whitespace-nowrap align-middle" data-label="状态">
                         <div class="flex items-center justify-between lg:justify-end w-full">
                             <!-- 手机端专属图钉图标 -->
-                            <div class="lg:hidden flex items-center text-current opacity-70">
+                            <div class="lg:hidden flex items-center text-[var(--border-color)]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-rotate-45">
                                     <line x1="12" y1="17" x2="12" y2="22"></line>
                                     <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
@@ -488,7 +493,7 @@
                             
                             <!-- 操作与打勾框 -->
                             <div class="flex items-center space-x-3">
-                                <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
+                                <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[var(--border-color)]" title="点击删除条目">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                                 <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
