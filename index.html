@@ -19,11 +19,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Newsreader', 'Noto Serif SC', serif;
+            /* 统一继承 Tailwind 的系统等宽字体 */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -119,40 +118,42 @@
         }
     </style>
 </head>
-<body id="app-body" class="min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
+<!-- 添加 font-mono 实现全局打字机等宽字体 -->
+<body id="app-body" class="font-mono min-h-screen flex flex-col antialiased bg-[#0b0b0b] text-[#d4b886] selection:bg-[#d4b886] selection:text-[#0b0b0b]">
 
     <header class="w-full max-w-6xl mx-auto px-4 sm:px-8 pt-8 sm:pt-16 pb-8 sm:pb-12 flex flex-row justify-between items-end border-b border-[var(--divider-color)] gap-3 sm:gap-6">
         <div>
-            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
-            <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
+            <!-- 移除了原本强制衬线字体的内联样式，统一继承系统等宽字体 -->
+            <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3 font-bold">CREATION PLAN CHECKLIST</p>
+            <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886] font-bold" style="text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
             </button>
-            <span id="current-date-display" class="text-xs text-[#d4b886] font-mono tracking-wider inline-block text-right"></span>
+            <span id="current-date-display" class="text-xs text-[#d4b886] tracking-wider inline-block text-right"></span>
         </div>
     </header>
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12">
         <!-- 二维卡片网格容器 -->
-        <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
             <!-- 动态填充卡片 -->
         </div>
 
         <div id="empty-state" class="hidden py-32 text-center">
             <p class="text-sm text-[#d4b886] tracking-wide mb-1">暂无相关条目</p>
-            <p class="text-[11px] text-[#d4b886] opacity-60 font-mono">点击右下角 + 新计划开始记录</p>
+            <p class="text-[11px] text-[#d4b886] opacity-60">点击右下角 + 新计划开始记录</p>
         </div>
     </main>
 
-    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] font-mono opacity-80">
+    <footer class="py-8 sm:py-12 px-4 sm:px-8 max-w-6xl mx-auto w-full border-t border-[var(--divider-color)] text-left text-[11px] text-[var(--text-color)] tracking-[0.2em] opacity-80">
         <p>©️ 2026 Z_Z</p>
     </footer>
 
     <div class="fixed bottom-6 sm:bottom-8 inset-x-0 z-40 pointer-events-none">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex justify-end">
-            <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-mono font-normal shadow-lg whitespace-nowrap">
+            <button onclick="openModal()" class="pointer-events-auto mr-2 sm:mr-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-[#d4b886] text-[#0b0b0b] text-xs sm:text-sm tracking-[0.15em] uppercase hover:opacity-90 transition-opacity duration-150 font-normal shadow-lg whitespace-nowrap">
                 + 新计划
             </button>
         </div>
@@ -162,7 +163,7 @@
     <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-5 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
-                <h3 id="modal-title" class="text-sm tracking-widest uppercase font-mono text-[#d4b886]">新增创作计划</h3>
+                <h3 id="modal-title" class="text-sm tracking-widest uppercase text-[#d4b886]">新增创作计划</h3>
                 <button onclick="closeModal()" class="text-[#d4b886] hover:opacity-100 opacity-70 transition-opacity">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -170,24 +171,24 @@
             <form id="task-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
                 <input type="hidden" id="task-id">
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">日期</label>
-                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5">日期</label>
+                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">主题</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5">主题</label>
                     <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">配乐</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5">配乐</label>
                     <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5">文案</label>
                     <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
-                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">下一步 (验证口令)</button>
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-medium">下一步 (验证口令)</button>
                 </div>
             </form>
         </div>
@@ -196,11 +197,11 @@
     <!-- Confirm Delete Modal -->
     <div id="confirm-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="confirm-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
-            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
-            <p class="text-xs text-[#d4b886] mb-6 font-serif opacity-85">确定要移除这条创作计划吗？</p>
+            <h4 class="text-xs uppercase tracking-widest text-[#d4b886] mb-2">删除确认</h4>
+            <p class="text-xs text-[#d4b886] mb-6 opacity-85">确定要移除这条创作计划吗？</p>
             <div class="flex justify-center space-x-3">
-                <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认删除</button>
+                <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886]">取消</button>
+                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-medium">确认删除</button>
             </div>
         </div>
     </div>
@@ -208,22 +209,22 @@
     <!-- Password Modal -->
     <div id="password-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-[60] flex items-center justify-center p-4 hidden">
         <div id="password-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
-            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">权限验证</h4>
-            <p class="text-xs text-[#d4b886] mb-3 font-serif opacity-85">请输入管理口令以执行此操作</p>
+            <h4 class="text-xs uppercase tracking-widest text-[#d4b886] mb-2">权限验证</h4>
+            <p class="text-xs text-[#d4b886] mb-3 opacity-85">请输入管理口令以执行此操作</p>
             
             <form onsubmit="submitPassword(event)" class="space-y-3">
-                <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono text-center focus:outline-none focus:border-[#d4b886]">
-                <p id="password-error-msg" class="text-[11px] text-red-400 font-mono hidden">口令错误，请重新输入</p>
+                <input type="password" id="input-secret-key" placeholder="请输入口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs text-center focus:outline-none focus:border-[#d4b886]">
+                <p id="password-error-msg" class="text-[11px] text-red-400 hidden">口令错误，请重新输入</p>
                 <div class="flex justify-center space-x-3 pt-2">
-                    <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认提交</button>
+                    <button type="button" onclick="closePasswordModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886]">取消</button>
+                    <button type="submit" id="password-submit-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-medium">确认提交</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
+    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -294,35 +295,35 @@
             const metaTheme = document.getElementById('meta-theme-color');
 
             if (theme === 'light') {
-                if (metaTheme) metaTheme.setAttribute('content', '#fbfbf9');
-                body.style.setProperty('--bg-color', '#fbfbf9');
-                body.style.setProperty('--text-color', '#2c2825');
-                body.style.setProperty('--border-color', '#2c2825');
-                body.style.setProperty('--check-color', '#2c2825');
-                body.style.setProperty('--completed-color', '#948c85');
-                body.style.setProperty('--completed-border-color', '#d5d0c7');
-                body.style.setProperty('--divider-color', '#e5e2db');
-                body.style.setProperty('--sub-divider-color', '#e8e2d5');
-                body.style.setProperty('--scrollbar-color', '#d5d0c7');
-                body.style.setProperty('--card-bg', '#f5f3ec');
+                if (metaTheme) metaTheme.setAttribute('content', '#ffffff');
+                body.style.setProperty('--bg-color', '#ffffff');
+                body.style.setProperty('--text-color', '#1a1a1a');
+                body.style.setProperty('--border-color', '#1a1a1a');
+                body.style.setProperty('--check-color', '#1a1a1a');
+                body.style.setProperty('--completed-color', '#999999');
+                body.style.setProperty('--completed-border-color', '#e5e5e5');
+                body.style.setProperty('--divider-color', '#ebebeb');
+                body.style.setProperty('--sub-divider-color', '#f0f0f0');
+                body.style.setProperty('--scrollbar-color', '#d4d4d4');
+                body.style.setProperty('--card-bg', '#f8f8f8');
 
-                body.style.backgroundColor = '#fbfbf9';
-                body.style.color = '#2c2825';
+                body.style.backgroundColor = '#ffffff';
+                body.style.color = '#1a1a1a';
                 
                 themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"></path>';
 
                 [modalContent, confirmContent, passwordContent].forEach(m => {
                     if (m) {
-                        m.style.backgroundColor = '#f4f2ec';
-                        m.style.color = '#2c2825';
-                        m.style.borderColor = '#d5d0c7';
+                        m.style.backgroundColor = '#f8f8f8';
+                        m.style.color = '#1a1a1a';
+                        m.style.borderColor = '#e5e5e5';
                     }
                 });
 
                 formInputs.forEach(input => {
-                    input.style.backgroundColor = '#eae7df';
-                    input.style.borderColor = '#d0cbc0';
-                    input.style.color = '#2c2825';
+                    input.style.backgroundColor = '#f0f0f0';
+                    input.style.borderColor = '#e5e5e5';
+                    input.style.color = '#1a1a1a';
                 });
             } else {
                 if (metaTheme) metaTheme.setAttribute('content', '#0b0b0b');
@@ -335,7 +336,7 @@
                 body.style.setProperty('--divider-color', '#222222');
                 body.style.setProperty('--sub-divider-color', '#262626');
                 body.style.setProperty('--scrollbar-color', '#262626');
-                body.style.setProperty('--card-bg', '#121212');
+                body.style.setProperty('--card-bg', '#161616');
 
                 body.style.backgroundColor = '#0b0b0b';
                 body.style.color = '#d4b886';
@@ -344,14 +345,14 @@
 
                 [modalContent, confirmContent, passwordContent].forEach(m => {
                     if (m) {
-                        m.style.backgroundColor = '#141414';
+                        m.style.backgroundColor = '#161616';
                         m.style.color = '#d4b886';
                         m.style.borderColor = '#2a2a2a';
                     }
                 });
 
                 formInputs.forEach(input => {
-                    input.style.backgroundColor = '#1b1b1b';
+                    input.style.backgroundColor = '#1c1c1c';
                     input.style.borderColor = '#2f2f2f';
                     input.style.color = '#d4b886';
                 });
@@ -384,10 +385,18 @@
 
             grid.innerHTML = tasks.map(task => `
                 <div class="plan-card p-5 sm:p-6 flex flex-col justify-between ${task.completed ? 'completed-card' : ''}" onclick="window.handleCardClick(event, '${task.id}')">
+                    
+                    <!-- Pushpin (图钉) - 带有轻微倾斜和阴影 -->
+                    <div class="absolute -top-3.5 left-5 z-10 text-[var(--text-color)] pointer-events-none drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="transform -rotate-[15deg] opacity-85">
+                            <path d="M16 11.5a2.5 2.5 0 0 1-1.39-2.24V6A1.5 1.5 0 0 0 13.11 4.5H10.9a1.5 1.5 0 0 0-1.5 1.5v3.26a2.5 2.5 0 0 1-1.4 2.24l-2 1A1.5 1.5 0 0 0 6.66 15H11v6.5a.5.5 0 0 0 1 0V15h4.34a1.5 1.5 0 0 0 .66-2.5l-2-1z" />
+                        </svg>
+                    </div>
+
                     <div>
                         <!-- 卡片顶部：日期与控制按钮 -->
                         <div class="flex justify-between items-start mb-4">
-                            <span class="text-[11px] font-mono tracking-wider opacity-75">${task.date}</span>
+                            <span class="text-[14px] tracking-wide opacity-85">${task.date}</span>
                             <div class="flex items-center space-x-2">
                                 <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation(); window.toggleTask('${task.id}')" title="勾选状态">
                                     <input type="checkbox" ${task.completed ? 'checked' : ''} readonly onclick="return false;" class="minimal-checkbox">
@@ -399,18 +408,21 @@
                         </div>
 
                         <!-- 主题 -->
-                        <h2 class="text-sm font-semibold tracking-wide mb-3 line-clamp-2">${escapeHTML(task.theme || '')}</h2>
+                        <h2 class="text-[15px] leading-snug tracking-wide mb-3 line-clamp-2">${escapeHTML(task.theme || '')}</h2>
 
                         <!-- 配乐 -->
-                        <div class="mb-3 text-[11px] font-mono opacity-80 flex items-center space-x-1.5">
-                            <svg class="w-3 h-3 shrink-0 opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m-10.5 3v10.5M9 9l-4.5 1.5M19.5 6v10.5M19.5 16.5L9 20.25"></path></svg>
+                        <div class="mb-4 text-[14px] opacity-90 flex items-center space-x-1.5">
+                            <!-- 经典音乐音符 SVG -->
+                            <svg class="w-3.5 h-3.5 shrink-0 opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
                             <span class="truncate">${escapeHTML(task.bgm || '')}</span>
                         </div>
                     </div>
 
                     <!-- 文案摘要 -->
-                    <div class="pt-3 mt-3 border-t border-[var(--sub-divider-color)]">
-                        <p class="text-xs leading-relaxed opacity-85 line-clamp-3">${escapeHTML(task.copywriting || '')}</p>
+                    <div class="pt-3.5 border-t border-[var(--sub-divider-color)]">
+                        <p class="text-[14px] leading-relaxed opacity-90 line-clamp-3">${escapeHTML(task.copywriting || '')}</p>
                     </div>
                 </div>
             `).join('');
