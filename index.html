@@ -27,13 +27,20 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 极简无填充自定义勾选框：打勾时不填充任何背景色，仅保留描边 */
+        /* 强制卡片(行)内容颜色与顶部标题一致 (#d4b886) */
+        #task-table-body tr,
+        #task-table-body td,
+        #task-table-body td[data-label]:not(.status-cell)::before {
+            color: #d4b886 !important;
+        }
+
+        /* 极简无填充自定义勾选框：颜色强制与标题一致，仅保留描边 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
             width: 16px;
             height: 16px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #d4b886 !important;
             background-color: transparent !important;
             border-radius: 2px;
             cursor: pointer;
@@ -44,7 +51,7 @@
         }
         .minimal-checkbox:checked {
             background-color: transparent !important;
-            border-color: var(--border-color);
+            border-color: #d4b886 !important;
         }
         .minimal-checkbox:checked::after {
             content: '';
@@ -53,22 +60,22 @@
             left: 4px;
             width: 5px;
             height: 9px;
-            border: solid var(--check-color);
+            border: solid #d4b886 !important;
             border-width: 0 1.5px 1.5px 0;
             transform: rotate(45deg);
         }
 
-        /* 已完成时整行变灰并带划线 */
+        /* 已完成时整行变灰并带划线，颜色与标题一致 */
         .completed-row {
             opacity: 0.4;
             text-decoration: line-through;
-            color: var(--completed-color) !important;
+            color: #d4b886 !important;
         }
         .completed-row .minimal-checkbox {
-            border-color: var(--completed-color) !important;
+            border-color: #d4b886 !important;
         }
         .completed-row .minimal-checkbox:checked::after {
-            border-color: var(--completed-color) !important;
+            border-color: #d4b886 !important;
         }
 
         /* 可点击行的悬停反馈 */
@@ -129,13 +136,13 @@
                 display: block;
                 width: 100%;
             }
-            /* 将每一行转变为 Grid 布局 */
+            /* 将每一行转变为 Grid 布局，边框颜色不变 */
             #task-table-body tr {
                 display: grid;
                 grid-template-columns: 1fr 1fr; /* 分配为左右两列 */
                 gap: 8px 12px; /* 设置行间和列间距 */
                 width: 100%;
-                border: 1px solid var(--sub-divider-color, #262626);
+                border: 1px solid var(--sub-divider-color, #262626); /* 边框颜色依旧跟随主题 */
                 margin-bottom: 14px;
                 padding: 14px 12px;
                 border-radius: 2px;
@@ -362,10 +369,8 @@
             if (theme === 'light') {
                 if (metaTheme) metaTheme.setAttribute('content', '#fbfbf9');
                 body.style.setProperty('--bg-color', '#fbfbf9');
-                body.style.setProperty('--text-color', '#2c2825');
-                body.style.setProperty('--border-color', '#2c2825');
-                body.style.setProperty('--check-color', '#2c2825');
-                body.style.setProperty('--completed-color', '#948c85');
+                body.style.setProperty('--text-color', '#2c2825'); // Body overall text (e.g. footer) changes
+                
                 body.style.setProperty('--divider-color', '#e5e2db');
                 body.style.setProperty('--sub-divider-color', '#e8e2d5');
                 body.style.setProperty('--scrollbar-color', '#d5d0c7');
@@ -378,27 +383,25 @@
 
                 if (modalContent) {
                     modalContent.style.backgroundColor = '#f4f2ec';
-                    modalContent.style.color = '#2c2825';
+                    modalContent.style.color = '#d4b886'; // 强制弹窗卡片文字颜色一致
                     modalContent.style.borderColor = '#d5d0c7';
                 }
                 if (confirmContent) {
                     confirmContent.style.backgroundColor = '#f4f2ec';
-                    confirmContent.style.color = '#2c2825';
+                    confirmContent.style.color = '#d4b886'; // 强制弹窗卡片文字颜色一致
                     confirmContent.style.borderColor = '#d5d0c7';
                 }
 
                 formInputs.forEach(input => {
                     input.style.backgroundColor = '#eae7df';
                     input.style.borderColor = '#d0cbc0';
-                    input.style.color = '#2c2825';
+                    input.style.color = '#d4b886'; // 强制输入框文字颜色一致
                 });
             } else {
                 if (metaTheme) metaTheme.setAttribute('content', '#0b0b0b');
                 body.style.setProperty('--bg-color', '#0b0b0b');
                 body.style.setProperty('--text-color', '#d4b886');
-                body.style.setProperty('--border-color', '#d4b886');
-                body.style.setProperty('--check-color', '#d4b886');
-                body.style.setProperty('--completed-color', '#8c7d62');
+                
                 body.style.setProperty('--divider-color', '#222222');
                 body.style.setProperty('--sub-divider-color', '#262626');
                 body.style.setProperty('--scrollbar-color', '#262626');
