@@ -251,7 +251,6 @@
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
                     <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
-                <!-- 包含口令输入框 -->
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">操作口令</label>
                     <input type="password" id="task-secret" placeholder="请输入操作口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
@@ -459,7 +458,7 @@
 
             emptyState.classList.add('hidden');
             
-            // 已更新：最新的日期在最前面；如果日期相同，最新创建的（ID较大）在最前面
+            // 最新日期及最新创建在最前
             filtered.sort((a, b) => {
                 const dateDiff = new Date(b.date) - new Date(a.date);
                 if (dateDiff !== 0) return dateDiff;
@@ -520,40 +519,37 @@
             window.openModal(id);
         };
 
+        // 修改：切换状态时每次弹出输入框要求输入口令
         window.toggleTask = async function(id) {
             const task = tasks.find(t => t.id === id);
             if (task) {
-                // 如果没有保存的口令，提示输入
-                let secretKey = localStorage.getItem('user_secret_key');
+                const secretKey = prompt("请输入操作口令以切换状态：");
                 if (!secretKey) {
-                    secretKey = prompt("请输入口令以切换状态：");
-                    if (!secretKey) return;
+                    renderTasks(); // 未输入则重置勾选状态
+                    return;
                 }
+
                 try {
                     await setDoc(doc(db, "tasks", id), {
                         ...task,
                         completed: !task.completed,
                         secretKey: secretKey
                     }, { merge: true });
-                    // 如果成功则记忆口令，方便后续勾选
-                    localStorage.setItem('user_secret_key', secretKey);
                 } catch (error) {
                     console.error("Toggle task error:", error);
                     showToast('口令错误或更新失败');
+                    renderTasks();
                 }
             }
         };
 
+        // 修改：每次打开弹窗清空口令输入框
         window.openModal = function(editId = null) {
             const modal = document.getElementById('task-modal');
             const form = document.getElementById('task-form');
             form.reset();
             
-            // 自动填充上次使用的口令（如有）
-            const savedSecret = localStorage.getItem('user_secret_key');
-            if (savedSecret) {
-                document.getElementById('task-secret').value = savedSecret;
-            }
+            document.getElementById('task-secret').value = '';
 
             if (editId) {
                 document.getElementById('modal-title').innerText = '编辑创作计划';
@@ -578,9 +574,10 @@
             document.getElementById('task-modal').classList.add('hidden');
         };
 
+        // 修改：每次点击删除清空删除口令输入框
         window.promptDelete = function(id) {
             deleteTargetId = id;
-            document.getElementById('delete-secret').value = localStorage.getItem('user_secret_key') || '';
+            document.getElementById('delete-secret').value = '';
             document.getElementById('confirm-modal').classList.remove('hidden');
         };
 
@@ -601,7 +598,6 @@
                     await setDoc(taskRef, { secretKey: secretKey }, { merge: true });
                     await deleteDoc(taskRef);
                     
-                    localStorage.setItem('user_secret_key', secretKey);
                     showToast('已成功删除条目');
                     closeConfirmModal();
                 } catch (error) {
@@ -639,7 +635,6 @@
 
             try {
                 await setDoc(doc(db, "tasks", docId), taskData, { merge: true });
-                localStorage.setItem('user_secret_key', secretKey);
                 showToast(id ? '已更新创作计划' : '已添加新创作计划');
                 closeModal();
             } catch (error) {
