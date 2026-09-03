@@ -263,7 +263,7 @@
         </div>
     </div>
 
-    <!-- Confirm Delete Modal (删除确认 + 口令验证) -->
+    <!-- Confirm Delete Modal (删除确认) -->
     <div id="confirm-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="confirm-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
@@ -274,6 +274,21 @@
             <div class="flex justify-center space-x-3">
                 <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
                 <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Status Modal (状态切换验证弹窗) -->
+    <div id="toggle-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
+        <div id="toggle-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
+            <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">状态更新</h4>
+            <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">请输入口令以变更状态</p>
+            <div class="mb-4 text-left">
+                <input type="password" id="toggle-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+            </div>
+            <div class="flex justify-center space-x-3">
+                <button onclick="closeToggleModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
+                <button id="toggle-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium font-bold">确认更新</button>
             </div>
         </div>
     </div>
@@ -308,6 +323,7 @@
 
         let tasks = [];
         let deleteTargetId = null;
+        let toggleTargetId = null;
         let revealedTaskId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
 
@@ -356,8 +372,9 @@
             const themeIcon = document.getElementById('theme-icon');
             const modalContent = document.getElementById('modal-content');
             const confirmContent = document.getElementById('confirm-content');
+            const toggleContent = document.getElementById('toggle-content');
             
-            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea, #delete-secret');
+            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea, #delete-secret, #toggle-secret');
             const metaTheme = document.getElementById('meta-theme-color');
 
             if (theme === 'light') {
@@ -386,6 +403,11 @@
                     confirmContent.style.backgroundColor = '#f4f2ec';
                     confirmContent.style.color = '#2c2825';
                     confirmContent.style.borderColor = '#d5d0c7';
+                }
+                if (toggleContent) {
+                    toggleContent.style.backgroundColor = '#f4f2ec';
+                    toggleContent.style.color = '#2c2825';
+                    toggleContent.style.borderColor = '#d5d0c7';
                 }
 
                 formInputs.forEach(input => {
@@ -419,6 +441,11 @@
                     confirmContent.style.backgroundColor = '#141414';
                     confirmContent.style.color = '#d4b886';
                     confirmContent.style.borderColor = '#2a2a2a';
+                }
+                if (toggleContent) {
+                    toggleContent.style.backgroundColor = '#141414';
+                    toggleContent.style.color = '#d4b886';
+                    toggleContent.style.borderColor = '#2a2a2a';
                 }
 
                 formInputs.forEach(input => {
@@ -458,7 +485,6 @@
 
             emptyState.classList.add('hidden');
             
-            // 最新日期及最新创建在最前
             filtered.sort((a, b) => {
                 const dateDiff = new Date(b.date) - new Date(a.date);
                 if (dateDiff !== 0) return dateDiff;
@@ -492,7 +518,7 @@
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                                 <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
-                                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" class="minimal-checkbox">
+                                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.promptToggle('${task.id}')" class="minimal-checkbox">
                                 </label>
                             </div>
                         </div>
@@ -519,31 +545,43 @@
             window.openModal(id);
         };
 
-        // 修改：切换状态时每次弹出输入框要求输入口令
-        window.toggleTask = async function(id) {
-            const task = tasks.find(t => t.id === id);
-            if (task) {
-                const secretKey = prompt("请输入操作口令以切换状态：");
-                if (!secretKey) {
-                    renderTasks(); // 未输入则重置勾选状态
-                    return;
-                }
-
-                try {
-                    await setDoc(doc(db, "tasks", id), {
-                        ...task,
-                        completed: !task.completed,
-                        secretKey: secretKey
-                    }, { merge: true });
-                } catch (error) {
-                    console.error("Toggle task error:", error);
-                    showToast('口令错误或更新失败');
-                    renderTasks();
-                }
-            }
+        // 统一为自定义弹窗
+        window.promptToggle = function(id) {
+            toggleTargetId = id;
+            document.getElementById('toggle-secret').value = '';
+            document.getElementById('toggle-modal').classList.remove('hidden');
         };
 
-        // 修改：每次打开弹窗清空口令输入框
+        window.closeToggleModal = function() {
+            toggleTargetId = null;
+            document.getElementById('toggle-modal').classList.add('hidden');
+            renderTasks(); // 恢复复选框原本的显示
+        };
+
+        document.getElementById('toggle-yes-btn').addEventListener('click', async () => {
+            const secretKey = document.getElementById('toggle-secret').value.trim();
+            if (!secretKey) {
+                showToast('请输入口令');
+                return;
+            }
+            if (toggleTargetId) {
+                const task = tasks.find(t => t.id === toggleTargetId);
+                if (task) {
+                    try {
+                        await setDoc(doc(db, "tasks", toggleTargetId), {
+                            ...task,
+                            completed: !task.completed,
+                            secretKey: secretKey
+                        }, { merge: true });
+                        closeToggleModal();
+                    } catch (error) {
+                        console.error("Toggle task error:", error);
+                        showToast('口令错误，更新失败');
+                    }
+                }
+            }
+        });
+
         window.openModal = function(editId = null) {
             const modal = document.getElementById('task-modal');
             const form = document.getElementById('task-form');
@@ -574,7 +612,6 @@
             document.getElementById('task-modal').classList.add('hidden');
         };
 
-        // 修改：每次点击删除清空删除口令输入框
         window.promptDelete = function(id) {
             deleteTargetId = id;
             document.getElementById('delete-secret').value = '';
