@@ -458,7 +458,13 @@
             }
 
             emptyState.classList.add('hidden');
-            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // 已更新：最新的日期在最前面；如果日期相同，最新创建的（ID较大）在最前面
+            filtered.sort((a, b) => {
+                const dateDiff = new Date(b.date) - new Date(a.date);
+                if (dateDiff !== 0) return dateDiff;
+                return (b.id || 0) > (a.id || 0) ? 1 : -1;
+            });
 
             tbody.innerHTML = filtered.map(task => `
                 <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="window.handleRowClick(event, '${task.id}')" ondblclick="window.handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
@@ -591,11 +597,6 @@
             }
             if (deleteTargetId) {
                 try {
-                    // Firebase 安全规则需要 secretKey 校验，直接尝试删除
-                    // Firestore 安全规则需要在文档中比对或更新，对于 deleteDoc，直接触发 rules 校验
-                    // 由于规则写的是 request.resource.data.secretKey == 'ming2026'，删除时先覆盖更新再删除，或者通过 setDoc 验证
-                    
-                    // 这里尝试覆盖提交正确 secretKey 确保可通过规则校验后再进行删除
                     const taskRef = doc(db, "tasks", deleteTargetId);
                     await setDoc(taskRef, { secretKey: secretKey }, { merge: true });
                     await deleteDoc(taskRef);
