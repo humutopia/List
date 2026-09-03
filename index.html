@@ -202,7 +202,6 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-[var(--divider-color)] text-[10px] uppercase tracking-[0.2em] text-[#d4b886] font-mono">
-                        <!-- 网页端状态栏移到文案后面 -->
                         <th class="py-3 px-3 sm:px-6 font-normal w-24 sm:w-32">日期</th>
                         <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">主题</th>
                         <th class="py-3 px-3 sm:px-6 font-normal w-40 sm:w-56">配乐</th>
@@ -287,84 +286,36 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-8 sm:translate-x-0 bg-[#d4b886] text-[#0b0b0b] px-4 py-2.5 text-[11px] font-mono tracking-wider opacity-0 transition-opacity duration-200 pointer-events-none z-50 font-medium whitespace-nowrap"></div>
 
-    <script>
-        const defaultTasks = [
-            {
-                id: '1',
-                date: '2026-08-10',
-                theme: '电影感夜景街拍',
-                bgm: 'Kavinsky - Nightcall',
-                copywriting: '霓虹灯牌的冷暖交织，捕捉雨后地面积水反射出的赛博朋克边缘，冷峻且疏离。',
-                completed: false
-            },
-            {
-                id: '2',
-                date: '2026-08-12',
-                theme: '极简咖啡馆角落',
-                bgm: 'Chet Baker - I Fall In Love Too Easily',
-                copywriting: '纯白桌面与原木椅背的几何切割，咖啡杯沿的热气是画面里唯一的动态。',
-                completed: false
-            },
-            {
-                id: '3',
-                date: '2026-08-15',
-                theme: '自然纹理与微距',
-                bgm: 'Brian Eno - An Ending (Ascent)',
-                copywriting: '枯叶的脉络和粗糙的树皮，生命的消亡与时间留存都在这些微妙的肌理之中。',
-                completed: true
-            },
-            {
-                id: '4',
-                date: '2026-08-18',
-                theme: '城市废墟与新生',
-                bgm: 'Hans Zimmer - Cornfield Chase',
-                copywriting: '钢筋水泥裂缝中挣扎长出的野草，尝试用低视角去记录这种无声的对抗。',
-                completed: false
-            },
-            {
-                id: '5',
-                date: '2026-08-22',
-                theme: '胶片风日常碎片',
-                bgm: 'Norah Jones - Don\'t Know Why',
-                copywriting: '打翻的牛奶、晾衣绳上随风摆动的白衬衫，用轻微过曝的高光记录夏日慵懒感。',
-                completed: false
-            },
-            {
-                id: '6',
-                date: '2026-08-25',
-                theme: '现代建筑与光影切割',
-                bgm: 'Max Richter - On the Nature of Daylight',
-                copywriting: '寻找下午四点的斜阳，让建筑外立面的硬朗阴影成为画面的主导线条。',
-                completed: true
-            },
-            {
-                id: '7',
-                date: '2026-08-28',
-                theme: '情绪肖像与背影',
-                bgm: 'Billie Eilish - everything i wanted',
-                copywriting: '不露脸的叙事，通过肢体语言、风吹动的发丝和空旷的背景空间来传递内心的孤独。',
-                completed: false
-            },
-            {
-                id: '8',
-                date: '2026-08-31',
-                theme: '雨天倒影与光斑',
-                bgm: 'The Weeknd - Blinding Lights',
-                copywriting: '迷离焦外与车灯光斑，透过沾满雨滴的玻璃窗，城市变得光怪陆离、暧昧不清。',
-                completed: false
-            },
-            {
-                id: '9',
-                date: '2026-09-02',
-                theme: '独立出版物的排版实验',
-                bgm: 'Nils Frahm - Says',
-                copywriting: '留白不仅是空间，也是一种克制的情绪表达。感受粗糙纸张纹理赋予文字的温度。',
-                completed: false
-            }
-        ];
+    <!-- Firebase SDK (v10 Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            setDoc, 
+            deleteDoc, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Note: Changed LocalStorage key to v10 so the new 9 templates force-load for users.
-        let tasks = JSON.parse(localStorage.getItem('minimal_editorial_tasks_v10')) || defaultTasks;
+        // 已替换为你的项目配置信息
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdut-ehczuJVlP95RyIAGW1CTLVq4Ei4k",
+            authDomain: "conplan.firebaseapp.com",
+            projectId: "conplan",
+            storageBucket: "conplan.firebasestorage.app",
+            messagingSenderId: "750282375913",
+            appId: "1:750282375913:web:8dde381098c55921432678"
+        };
+
+        // 初始化 Firebase 与 Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const tasksCollection = collection(db, "tasks");
+
+        const SECRET_KEY = 'ming2026';
+
+        let tasks = [];
         let deleteTargetId = null;
         let revealedTaskId = null;
         let currentTheme = localStorage.getItem('minimal_editorial_theme') || 'dark';
@@ -374,8 +325,19 @@
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' };
             document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('zh-CN', options);
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
-            renderTasks();
             alignTitleWidth();
+
+            // 监听 Firestore 实时更新
+            onSnapshot(tasksCollection, (snapshot) => {
+                tasks = snapshot.docs.map(docSnap => ({
+                    id: docSnap.id,
+                    ...docSnap.data()
+                }));
+                renderTasks();
+            }, (error) => {
+                console.error("Firebase sync error:", error);
+                showToast('数据同步失败，请检查配置');
+            });
         });
 
         function alignTitleWidth() {
@@ -477,17 +439,13 @@
             }
         }
 
-        function toggleTheme() {
+        window.toggleTheme = function() {
             if (currentTheme === 'dark') {
                 applyTheme('light');
             } else {
                 applyTheme('dark');
             }
-        }
-
-        function saveToStorage() {
-            localStorage.setItem('minimal_editorial_tasks_v10', JSON.stringify(tasks));
-        }
+        };
 
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -512,36 +470,33 @@
             filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             tbody.innerHTML = filtered.map(task => `
-                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="handleRowClick(event, '${task.id}')" ondblclick="handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
+                <tr class="group editable-row transition-colors ${task.completed ? 'completed-row' : ''} ${task.id === revealedTaskId ? 'row-revealed' : ''}" onclick="window.handleRowClick(event, '${task.id}')" ondblclick="window.handleRowDblClick(event, '${task.id}')" title="点击空白处可显示删除按钮，双击可编辑该条目">
                     <td class="py-4 px-3 sm:px-6 text-[11px] font-mono whitespace-nowrap" data-label="日期">
                         ${task.date}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs font-medium" data-label="主题">
-                        ${escapeHTML(task.theme)}
+                        ${escapeHTML(task.theme || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs" data-label="配乐">
-                        ${escapeHTML(task.bgm)}
+                        ${escapeHTML(task.bgm || '')}
                     </td>
                     <td class="py-4 px-3 sm:px-6 text-xs leading-relaxed max-w-sm" data-label="文案">
-                        ${escapeHTML(task.copywriting)}
+                        ${escapeHTML(task.copywriting || '')}
                     </td>
                     <td class="status-cell py-4 px-2 sm:px-4 whitespace-nowrap align-middle" data-label="状态">
                         <div class="flex items-center justify-between lg:justify-end w-full">
-                            <!-- 手机端专属图钉图标 -->
                             <div class="lg:hidden flex items-center text-current opacity-70">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-rotate-45">
                                     <line x1="12" y1="17" x2="12" y2="22"></line>
                                     <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
                                 </svg>
                             </div>
-                            
-                            <!-- 操作与打勾框 -->
                             <div class="flex items-center space-x-3">
-                                <button onclick="event.stopPropagation(); promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
+                                <button onclick="event.stopPropagation(); window.promptDelete('${task.id}')" class="row-delete-btn transition-opacity p-1 text-[#d4b886]" title="点击删除条目">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                                 <label class="inline-flex items-center cursor-pointer" onclick="event.stopPropagation()" title="点击切换完成状态">
-                                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')" class="minimal-checkbox">
+                                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="window.toggleTask('${task.id}')" class="minimal-checkbox">
                                 </label>
                             </div>
                         </div>
@@ -550,34 +505,41 @@
             `).join('');
         }
 
-        function handleRowClick(event, id) {
+        window.handleRowClick = function(event, id) {
             if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
                 return;
             }
             event.stopPropagation();
             revealedTaskId = (revealedTaskId === id) ? null : id;
             renderTasks();
-        }
+        };
 
-        function handleRowDblClick(event, id) {
+        window.handleRowDblClick = function(event, id) {
             if (event.target.closest('input') || event.target.closest('button') || event.target.closest('label')) {
                 return;
             }
             event.stopPropagation();
             revealedTaskId = null;
-            openModal(id);
-        }
+            window.openModal(id);
+        };
 
-        function toggleTask(id) {
+        window.toggleTask = async function(id) {
             const task = tasks.find(t => t.id === id);
             if (task) {
-                task.completed = !task.completed;
-                saveToStorage();
-                renderTasks();
+                try {
+                    await setDoc(doc(db, "tasks", id), {
+                        ...task,
+                        completed: !task.completed,
+                        secretKey: SECRET_KEY
+                    }, { merge: true });
+                } catch (error) {
+                    console.error("Toggle task error:", error);
+                    showToast('状态更新失败');
+                }
             }
-        }
+        };
 
-        function openModal(editId = null) {
+        window.openModal = function(editId = null) {
             const modal = document.getElementById('task-modal');
             const form = document.getElementById('task-form');
             form.reset();
@@ -599,33 +561,36 @@
             }
 
             modal.classList.remove('hidden');
-        }
+        };
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('task-modal').classList.add('hidden');
-        }
+        };
 
-        function promptDelete(id) {
+        window.promptDelete = function(id) {
             deleteTargetId = id;
             document.getElementById('confirm-modal').classList.remove('hidden');
-        }
+        };
 
-        function closeConfirmModal() {
+        window.closeConfirmModal = function() {
             deleteTargetId = null;
             document.getElementById('confirm-modal').classList.add('hidden');
-        }
+        };
 
-        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+        document.getElementById('confirm-yes-btn').addEventListener('click', async () => {
             if (deleteTargetId) {
-                tasks = tasks.filter(t => t.id !== deleteTargetId);
-                saveToStorage();
-                renderTasks();
-                showToast('已成功删除条目');
+                try {
+                    await deleteDoc(doc(db, "tasks", deleteTargetId));
+                    showToast('已成功删除条目');
+                } catch (error) {
+                    console.error("Delete task error:", error);
+                    showToast('删除失败');
+                }
                 closeConfirmModal();
             }
         });
 
-        function handleFormSubmit(e) {
+        window.handleFormSubmit = async function(e) {
             e.preventDefault();
             const id = document.getElementById('task-id').value;
             const date = document.getElementById('task-date').value;
@@ -633,32 +598,27 @@
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
 
-            if (id) {
-                const task = tasks.find(t => t.id === id);
-                if (task) {
-                    task.date = date;
-                    task.theme = theme;
-                    task.bgm = bgm;
-                    task.copywriting = copywriting;
-                    showToast('已更新创作计划');
-                }
-            } else {
-                const newTask = {
-                    id: Date.now().toString(),
-                    date,
-                    theme,
-                    bgm,
-                    copywriting,
-                    completed: false
-                };
-                tasks.push(newTask);
-                showToast('已添加新创作计划');
-            }
+            const docId = id || Date.now().toString();
+            const currentTask = tasks.find(t => t.id === id);
+            
+            const taskData = {
+                date,
+                theme,
+                bgm,
+                copywriting,
+                completed: currentTask ? currentTask.completed : false,
+                secretKey: SECRET_KEY
+            };
 
-            saveToStorage();
-            renderTasks();
-            closeModal();
-        }
+            try {
+                await setDoc(doc(db, "tasks", docId), taskData, { merge: true });
+                showToast(id ? '已更新创作计划' : '已添加新创作计划');
+                closeModal();
+            } catch (error) {
+                console.error("Save task error:", error);
+                showToast('保存失败，请重试');
+            }
+        };
 
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
