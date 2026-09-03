@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 优化 viewport，禁止输入时自动缩放页面 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LIST — 创作计划清单</title>
 
     <!-- PWA & Web App Standalone Support -->
@@ -25,6 +26,14 @@
         body {
             font-family: 'Newsreader', 'Noto Serif SC', serif;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* 解决 iOS 浏览器点击输入框自动放大页面 */
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        textarea {
+            font-size: 16px !important;
         }
 
         .minimal-checkbox {
@@ -237,23 +246,23 @@
                 <input type="hidden" id="task-id">
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">日期</label>
-                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#d4b886]">
+                    <input type="date" id="task-date" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 font-mono focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">主题</label>
-                    <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                    <input type="text" id="task-theme" placeholder="例如：现代主义建筑与光影" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">配乐</label>
-                    <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                    <input type="text" id="task-bgm" placeholder="例如：Max Richter - On the Nature of Daylight" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
-                    <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
+                    <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">操作口令</label>
-                    <input type="password" id="task-secret" placeholder="请输入操作口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                    <input type="password" id="task-secret" placeholder="请输入操作口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
                 </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
@@ -269,7 +278,7 @@
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
             <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">确定要移除这条创作计划吗？</p>
             <div class="mb-4 text-left">
-                <input type="password" id="delete-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                <input type="password" id="delete-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
             </div>
             <div class="flex justify-center space-x-3">
                 <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
@@ -284,7 +293,7 @@
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">状态更新</h4>
             <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">请输入口令以变更状态</p>
             <div class="mb-4 text-left">
-                <input type="password" id="toggle-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                <input type="password" id="toggle-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
             </div>
             <div class="flex justify-center space-x-3">
                 <button onclick="closeToggleModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
@@ -545,17 +554,17 @@
             window.openModal(id);
         };
 
-        // 统一为自定义弹窗
         window.promptToggle = function(id) {
             toggleTargetId = id;
-            document.getElementById('toggle-secret').value = '';
+            const input = document.getElementById('toggle-secret');
+            input.value = '';
             document.getElementById('toggle-modal').classList.remove('hidden');
         };
 
         window.closeToggleModal = function() {
             toggleTargetId = null;
             document.getElementById('toggle-modal').classList.add('hidden');
-            renderTasks(); // 恢复复选框原本的显示
+            renderTasks();
         };
 
         document.getElementById('toggle-yes-btn').addEventListener('click', async () => {
