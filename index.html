@@ -27,7 +27,6 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 极简无填充自定义勾选框 */
         .minimal-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -58,7 +57,6 @@
             transform: rotate(45deg);
         }
 
-        /* 已完成时整行变灰并带划线 */
         .completed-row {
             opacity: 0.4;
             text-decoration: line-through;
@@ -71,7 +69,6 @@
             border-color: var(--completed-color) !important;
         }
 
-        /* 可点击行的悬停反馈 */
         .editable-row {
             cursor: pointer;
             transition: background-color 0.15s ease;
@@ -80,7 +77,6 @@
             background-color: var(--row-hover-color);
         }
 
-        /* 删除(X)按钮：默认隐藏，仅当点击行的空白处将其"展开"后才显示 */
         .row-delete-btn {
             opacity: 0;
             pointer-events: none;
@@ -94,7 +90,6 @@
             opacity: 1;
         }
 
-        /* 渐入动效 */
         .fade-in {
             animation: fadeIn 0.25s ease-out forwards;
         }
@@ -103,7 +98,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 隐藏滚动条但保留功能 */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -116,7 +110,6 @@
             border-radius: 2px;
         }
 
-        /* ===== 移动端 + 平板适配：表格转为2x2网格卡片布局（<1024px 均生效） ===== */
         @media (max-width: 1023px) {
             table, tbody { 
                 display: block; 
@@ -129,11 +122,10 @@
                 display: block;
                 width: 100%;
             }
-            /* 将每一行转变为 Grid 布局 */
             #task-table-body tr {
                 display: grid;
-                grid-template-columns: 1fr 1fr; /* 分配为左右两列 */
-                gap: 8px 12px; /* 设置行间和列间距 */
+                grid-template-columns: 1fr 1fr;
+                gap: 8px 12px;
                 width: 100%;
                 border: 1px solid var(--sub-divider-color, #262626);
                 margin-bottom: 14px;
@@ -147,13 +139,12 @@
                 padding: 0 !important;
                 white-space: normal !important;
                 box-sizing: border-box;
-                word-break: break-word; /* 保证长文案能够换行 */
+                word-break: break-word;
             }
             
-            /* 状态行置顶，包含图钉和打勾框，横跨所有列 */
             #task-table-body td.status-cell {
                 grid-column: 1 / -1; 
-                grid-row: 1; /* 强制放到第一行 */
+                grid-row: 1;
                 display: flex;
                 align-items: center;
                 border-bottom: 1px dashed var(--sub-divider-color, #262626);
@@ -161,10 +152,9 @@
                 margin-bottom: 4px;
             }
             #task-table-body td.status-cell::before {
-                display: none; /* 移动端状态行不显示前缀 */
+                display: none;
             }
             
-            /* 其余字段前显示标签，方便识别 */
             #task-table-body td[data-label]:not(.status-cell)::before {
                 content: attr(data-label);
                 display: block;
@@ -186,7 +176,6 @@
             <p id="title-label" class="text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#d4b886] mb-2 sm:mb-3" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">CREATION PLAN CHECKLIST</p>
             <h1 id="main-title" class="text-2xl sm:text-3xl md:text-4xl text-[#d4b886]" style="font-family: 'SimSun', 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: bold; text-align: justify; text-align-last: justify; -moz-text-align-last: justify;">创作计划清单</h1>
         </div>
-        <!-- 白天夜晚切换图标放在日期上方，整体向右对齐 -->
         <div class="flex flex-col items-end justify-end space-y-2 shrink-0">
             <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1 text-[#d4b886] opacity-70 hover:opacity-100 transition-opacity bg-transparent border-none outline-none cursor-pointer flex items-center justify-center" aria-label="切换模式">
                 <svg id="theme-icon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"></svg>
@@ -210,7 +199,6 @@
                     </tr>
                 </thead>
                 <tbody id="task-table-body" class="divide-y divide-[var(--sub-divider-color)] text-xs">
-                    <!-- Dynamic Rows will be injected here -->
                 </tbody>
             </table>
         </div>
@@ -236,7 +224,7 @@
         </div>
     </div>
 
-    <!-- Modal Form -->
+    <!-- Modal Form (新增/编辑) -->
     <div id="task-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="modal-content" class="bg-[#141414] text-[#d4b886] max-w-md w-full p-5 sm:p-8 border border-[#2a2a2a] shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6 pb-3 border-b border-[#262626]">
@@ -263,6 +251,11 @@
                     <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">文案</label>
                     <textarea id="task-copywriting" rows="3" placeholder="写下一段简短的灵感草稿..." required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886] resize-none"></textarea>
                 </div>
+                <!-- 包含口令输入框 -->
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] text-[#d4b886] mb-1.5 font-mono">操作口令</label>
+                    <input type="password" id="task-secret" placeholder="请输入操作口令" required class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-2 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+                </div>
                 <div class="flex justify-end space-x-3 pt-4">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] transition-colors font-mono">取消</button>
                     <button type="submit" class="px-5 py-2 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 transition-opacity font-mono font-medium">确认保存</button>
@@ -271,14 +264,17 @@
         </div>
     </div>
 
-    <!-- Confirm Delete Modal -->
+    <!-- Confirm Delete Modal (删除确认 + 口令验证) -->
     <div id="confirm-modal" class="fixed inset-0 bg-[#000000]/60 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 hidden">
         <div id="confirm-content" class="bg-[#141414] text-[#d4b886] max-w-xs w-full p-6 border border-[#2a2a2a] shadow-2xl fade-in text-center">
             <h4 class="text-xs uppercase tracking-widest font-mono text-[#d4b886] mb-2">删除确认</h4>
-            <p class="text-xs text-[#d4b886] mb-6 font-serif opacity-85">确定要移除这条创作计划吗？</p>
+            <p class="text-xs text-[#d4b886] mb-4 font-serif opacity-85">确定要移除这条创作计划吗？</p>
+            <div class="mb-4 text-left">
+                <input type="password" id="delete-secret" placeholder="请输入操作口令" class="w-full bg-[#1b1b1b] text-[#d4b886] border border-[#2f2f2f] rounded-none px-3 py-1.5 text-xs placeholder-[#666666] focus:outline-none focus:border-[#d4b886]">
+            </div>
             <div class="flex justify-center space-x-3">
                 <button onclick="closeConfirmModal()" class="px-4 py-1.5 border border-[#2a2a2a] text-xs text-[#d4b886] hover:border-[#d4b886] font-mono">取消</button>
-                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">删除</button>
+                <button id="confirm-yes-btn" class="px-4 py-1.5 bg-[#d4b886] text-[#0b0b0b] text-xs hover:opacity-95 font-mono font-medium">确认删除</button>
             </div>
         </div>
     </div>
@@ -298,7 +294,6 @@
             onSnapshot 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 已替换为你的项目配置信息
         const firebaseConfig = {
             apiKey: "AIzaSyCdut-ehczuJVlP95RyIAGW1CTLVq4Ei4k",
             authDomain: "conplan.firebaseapp.com",
@@ -308,12 +303,9 @@
             appId: "1:750282375913:web:8dde381098c55921432678"
         };
 
-        // 初始化 Firebase 与 Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tasksCollection = collection(db, "tasks");
-
-        const SECRET_KEY = 'ming2026';
 
         let tasks = [];
         let deleteTargetId = null;
@@ -327,7 +319,6 @@
             document.getElementById('task-date').value = new Date().toISOString().split('T')[0];
             alignTitleWidth();
 
-            // 监听 Firestore 实时更新
             onSnapshot(tasksCollection, (snapshot) => {
                 tasks = snapshot.docs.map(docSnap => ({
                     id: docSnap.id,
@@ -336,7 +327,7 @@
                 renderTasks();
             }, (error) => {
                 console.error("Firebase sync error:", error);
-                showToast('数据同步失败，请检查配置');
+                showToast('数据同步失败，请检查网络');
             });
         });
 
@@ -367,7 +358,7 @@
             const modalContent = document.getElementById('modal-content');
             const confirmContent = document.getElementById('confirm-content');
             
-            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea');
+            const formInputs = document.querySelectorAll('#task-form input:not([type="hidden"]), #task-form textarea, #delete-secret');
             const metaTheme = document.getElementById('meta-theme-color');
 
             if (theme === 'light') {
@@ -526,15 +517,23 @@
         window.toggleTask = async function(id) {
             const task = tasks.find(t => t.id === id);
             if (task) {
+                // 如果没有保存的口令，提示输入
+                let secretKey = localStorage.getItem('user_secret_key');
+                if (!secretKey) {
+                    secretKey = prompt("请输入口令以切换状态：");
+                    if (!secretKey) return;
+                }
                 try {
                     await setDoc(doc(db, "tasks", id), {
                         ...task,
                         completed: !task.completed,
-                        secretKey: SECRET_KEY
+                        secretKey: secretKey
                     }, { merge: true });
+                    // 如果成功则记忆口令，方便后续勾选
+                    localStorage.setItem('user_secret_key', secretKey);
                 } catch (error) {
                     console.error("Toggle task error:", error);
-                    showToast('状态更新失败');
+                    showToast('口令错误或更新失败');
                 }
             }
         };
@@ -544,6 +543,12 @@
             const form = document.getElementById('task-form');
             form.reset();
             
+            // 自动填充上次使用的口令（如有）
+            const savedSecret = localStorage.getItem('user_secret_key');
+            if (savedSecret) {
+                document.getElementById('task-secret').value = savedSecret;
+            }
+
             if (editId) {
                 document.getElementById('modal-title').innerText = '编辑创作计划';
                 const task = tasks.find(t => t.id === editId);
@@ -569,6 +574,7 @@
 
         window.promptDelete = function(id) {
             deleteTargetId = id;
+            document.getElementById('delete-secret').value = localStorage.getItem('user_secret_key') || '';
             document.getElementById('confirm-modal').classList.remove('hidden');
         };
 
@@ -578,15 +584,29 @@
         };
 
         document.getElementById('confirm-yes-btn').addEventListener('click', async () => {
+            const secretKey = document.getElementById('delete-secret').value.trim();
+            if (!secretKey) {
+                showToast('请输入口令');
+                return;
+            }
             if (deleteTargetId) {
                 try {
-                    await deleteDoc(doc(db, "tasks", deleteTargetId));
+                    // Firebase 安全规则需要 secretKey 校验，直接尝试删除
+                    // Firestore 安全规则需要在文档中比对或更新，对于 deleteDoc，直接触发 rules 校验
+                    // 由于规则写的是 request.resource.data.secretKey == 'ming2026'，删除时先覆盖更新再删除，或者通过 setDoc 验证
+                    
+                    // 这里尝试覆盖提交正确 secretKey 确保可通过规则校验后再进行删除
+                    const taskRef = doc(db, "tasks", deleteTargetId);
+                    await setDoc(taskRef, { secretKey: secretKey }, { merge: true });
+                    await deleteDoc(taskRef);
+                    
+                    localStorage.setItem('user_secret_key', secretKey);
                     showToast('已成功删除条目');
+                    closeConfirmModal();
                 } catch (error) {
                     console.error("Delete task error:", error);
-                    showToast('删除失败');
+                    showToast('口令错误，删除失败');
                 }
-                closeConfirmModal();
             }
         });
 
@@ -597,6 +617,12 @@
             const theme = document.getElementById('task-theme').value.trim();
             const bgm = document.getElementById('task-bgm').value.trim();
             const copywriting = document.getElementById('task-copywriting').value.trim();
+            const secretKey = document.getElementById('task-secret').value.trim();
+
+            if (!secretKey) {
+                showToast('请输入操作口令');
+                return;
+            }
 
             const docId = id || Date.now().toString();
             const currentTask = tasks.find(t => t.id === id);
@@ -607,16 +633,17 @@
                 bgm,
                 copywriting,
                 completed: currentTask ? currentTask.completed : false,
-                secretKey: SECRET_KEY
+                secretKey: secretKey
             };
 
             try {
                 await setDoc(doc(db, "tasks", docId), taskData, { merge: true });
+                localStorage.setItem('user_secret_key', secretKey);
                 showToast(id ? '已更新创作计划' : '已添加新创作计划');
                 closeModal();
             } catch (error) {
                 console.error("Save task error:", error);
-                showToast('保存失败，请重试');
+                showToast('口令错误，保存失败');
             }
         };
 
